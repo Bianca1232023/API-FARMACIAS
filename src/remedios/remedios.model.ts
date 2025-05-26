@@ -5,8 +5,8 @@ export class Remedio extends Model {
   @Column({ type: DataType.STRING(100), allowNull: false })
   nome: string;
 
-  @Column({ type: DataType.NUMBER })
-  dosagem: number;
+  @Column({ type: DataType.STRING(8)})
+  quantidade: number;
 
   @Column({ type: DataType.STRING(100)})
   principio_ativo: string;
