@@ -1,0 +1,32 @@
+import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Usuario } from '../usuarios/usuarios.model';
+import { Remedio } from '../remedios/remedios.model';
+
+@Table({ tableName: 'doacoes_remedios', timestamps: false })
+export class DoacaoRemedio extends Model {
+  @Column({ type: DataType.INTEGER, primaryKey: true, autoIncrement: true })
+  id: number;
+
+  @ForeignKey(() => Usuario)
+  @Column(DataType.INTEGER)
+  usuarioId: number;
+
+  @ForeignKey(() => Remedio)
+  @Column(DataType.INTEGER)
+  remedioId: number;
+
+  @Column({ type: DataType.INTEGER, allowNull: false })
+  quantidade: number;
+
+  @Column({ type: DataType.DATEONLY, defaultValue: DataType.NOW })
+  data_doacao: Date;
+
+  @Column({ type: DataType.DATEONLY, allowNull: false })
+  data_fim_tratamento: Date;
+
+  @BelongsTo(() => Usuario)
+  usuario: Usuario;
+
+  @BelongsTo(() => Remedio)
+  remedio: Remedio;
+}
