@@ -1,4 +1,5 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import { Column, DataType, Model, Table, HasOne } from 'sequelize-typescript';
+import { Receita } from '../receita/receita.model';
 
 @Table
 export class Solicitacao extends Model<Solicitacao> {
@@ -13,4 +14,7 @@ export class Solicitacao extends Model<Solicitacao> {
 
   @Column({ type: DataType.STRING, defaultValue: 'pendente' }) // status: pendente | aprovada | recusada
   status: string;
+  
+@HasOne(() => Receita)
+receita: Receita;
 }
