@@ -7,8 +7,8 @@ describe('RemediosService', () => {
   let service: RemediosService;
 
   const mockRemedioModel = {
-    create: jest.fn().mockResolvedValue({ id: 1, nome: 'Puran', dosagem: 25, principio_ativo: 'levotiroxina' }),
-    findAll: jest.fn().mockResolvedValue([{ id: 1,nome: 'Puran', dosagem: 25, principio_ativo: 'levotiroxina' }]),
+    create: jest.fn().mockResolvedValue({ id: 1, nome: 'Puran', quantidade: '25', principio_ativo: 'levotiroxina' }),
+    findAll: jest.fn().mockResolvedValue([{ id: 1,nome: 'Puran', quantidade: '25', principio_ativo: 'levotiroxina' }]),
     findByPk: jest.fn().mockResolvedValue(null),
   };
 
@@ -27,7 +27,7 @@ describe('RemediosService', () => {
     it('should create a remedio', async () => {
     const dto = {
       nome: 'Puran',
-      dosagem: 25,
+      quantidade: '25',
       principio_ativo: 'levotiroxina',
     };
     const result = await service.create(dto);

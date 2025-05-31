@@ -1,5 +1,5 @@
 export class CreateRemedioDto {
     nome: string;
-    dosagem: number;
+    quantidade: string;
     principio_ativo: string;
 }
