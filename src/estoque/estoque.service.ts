@@ -3,21 +3,16 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Estoque } from './estoque.model';
 import { CreateEstoqueDto } from './dto/create-estoque.dto';
 import { UpdateEstoqueDto } from './dto/update-estoque.dto';
+import { CreationAttributes } from 'sequelize';
 
 @Injectable()
 export class EstoqueService {
   constructor(
-    @InjectModel(Estoque)
-    private readonly estoqueModel: typeof Estoque,
-  ) {}
- 
-  create(createEstoqueDto: CreateEstoqueDto): Promise<Estoque> {
-  return this.estoqueModel.create({
-    farmaciaId: createEstoqueDto.farmaciaId,
-    remedioId: createEstoqueDto.remedioId,
-    quantidade_disponivel: createEstoqueDto.quantidade_disponivel,
-  });
-}
+    @InjectModel(Estoque) private estoqueModel: typeof Estoque) {}
+
+  create(dto: CreationAttributes<Estoque>) {
+    return this.estoqueModel.create(dto);
+  }
 
   findAll() {
     return this.estoqueModel.findAll();
@@ -31,7 +26,19 @@ export class EstoqueService {
     return this.estoqueModel.update(dto, { where: { id } });
   }
 
+  patch(id: number, dto: Partial<UpdateEstoqueDto>) {
+    return this.estoqueModel.update(dto, { where: { id } });
+  }
+
   remove(id: number) {
     return this.estoqueModel.destroy({ where: { id } });
+  }
+
+  findByFarmacia(farmaciaId: number) {
+    return this.estoqueModel.findAll({ where: { farmaciaId } });
+  }
+
+  findByRemedio(remedioId: number) {
+    return this.estoqueModel.findAll({ where: { remedioId } });
   }
 }
