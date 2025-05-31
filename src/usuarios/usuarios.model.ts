@@ -1,6 +1,5 @@
 
 import { Table, Column, Model, DataType } from 'sequelize-typescript';
-import { HistoricoMedicamento } from '../historico-medicamentos/historico-medicamento.model';
 
 @Table({
   tableName: 'usuarios', timestamps: false})
