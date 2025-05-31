@@ -1,21 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { ReceitaService } from './receita.service';
 import { getModelToken } from '@nestjs/sequelize';
-import { HistoricoMedicamento } from './historico-medicamento.model';
-import { HistoricoMedicamentoService } from './historico-medicamento.service';
+import { Receita } from './receita.model';
 
-describe('HistoricoMedicamentoService', () => {
-  let service: HistoricoMedicamentoService;
+describe('ReceitaService', () => {
+  let service: ReceitaService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        HistoricoMedicamentoService,
+        ReceitaService,
         {
-          provide: getModelToken(HistoricoMedicamento),
+          provide: getModelToken(Receita),
           useValue: {
             create: jest.fn(),
-            findByPk: jest.fn(),
             findAll: jest.fn(),
+            findOne: jest.fn(),
             update: jest.fn(),
             destroy: jest.fn(),
           },
@@ -23,7 +23,7 @@ describe('HistoricoMedicamentoService', () => {
       ],
     }).compile();
 
-    service = module.get<HistoricoMedicamentoService>(HistoricoMedicamentoService);
+    service = module.get<ReceitaService>(ReceitaService);
   });
 
   it('should be defined', () => {

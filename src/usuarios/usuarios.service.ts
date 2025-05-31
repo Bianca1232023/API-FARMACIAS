@@ -1,44 +1,52 @@
-import { Usuario } from './entities/usuario.entity';
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
+import { Usuario } from './usuarios.model';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
-
+import { CreationAttributes } from 'sequelize';
 
 @Injectable()
 export class UsuariosService {
-  private usuarios: Usuario[] = [];
+  constructor(
+    @InjectModel(Usuario)
+    private usuarioModel: typeof Usuario,
+  ) {}
 
-  create(createUsuarioDto: CreateUsuarioDto): Usuario {
-    const id = this.usuarios.length + 1;
-    const usuario: Usuario = { id, ...createUsuarioDto };
-    this.usuarios.push(usuario);
-    return usuario;
+  async create(createUsuarioDto: CreationAttributes<Usuario>): Promise<Usuario> {
+    return this.usuarioModel.create(createUsuarioDto);
   }
 
-  findAll(): Usuario[] {
-    return this.usuarios;
+  async findAll(): Promise<Usuario[]> {
+    return this.usuarioModel.findAll();
   }
 
-  findOne(id: number): Usuario | undefined {
-    return this.usuarios.find(user => user.id === id);
+  async findOne(id: number): Promise<Usuario | null> {
+    return this.usuarioModel.findByPk(id);
   }
 
-  update(id: number, updateUsuarioDto: UpdateUsuarioDto): Usuario | null {
-    const index = this.usuarios.findIndex(user => user.id === id);
-    if (index >= 0) {
-      this.usuarios[index] = { ...this.usuarios[index], ...updateUsuarioDto };
-      return this.usuarios[index];
-    }
-    return null;
+  async findByEmail(email: string): Promise<Usuario | null> {
+    return this.usuarioModel.findOne({ where: { email } });
   }
 
-  remove(id: number): Usuario | null {
-    const index = this.usuarios.findIndex(user => user.id === id);
-    if (index >= 0) {
-      const [deleted] = this.usuarios.splice(index, 1);
-      return deleted;
-    }
-    return null;
+  async findFuncionarios(): Promise<Usuario[]> {
+    return this.usuarioModel.findAll({ where: { funcionario: true } });
+  }
+
+  async update(id: number, updateUsuarioDto: UpdateUsuarioDto): Promise<Usuario | null> {
+    await this.usuarioModel.update(updateUsuarioDto, { where: { id } });
+    return this.findOne(id);
+  }
+
+  async patch(id: number, data: Partial<UpdateUsuarioDto>): Promise<Usuario | null> {
+    await this.usuarioModel.update(data, { where: { id } });
+    return this.findOne(id);
+  }
+
+  async remove(id: number): Promise<void> {
+    await this.usuarioModel.destroy({ where: { id } });
+  }
+
+  async findByFarmaciaId(farmaciaId: number): Promise<Usuario[]> {
+    return this.usuarioModel.findAll({ where: { farmaciaId } });
   }
 }
-

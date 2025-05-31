@@ -1,4 +1,6 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import { Column, DataType, ForeignKey, Model, Table, HasOne } from 'sequelize-typescript';
+
+import { Receita } from '../receita/receita.model';
 
 @Table
 export class Solicitacao extends Model<Solicitacao> {
@@ -6,11 +8,19 @@ export class Solicitacao extends Model<Solicitacao> {
   usuarioId: number;
 
   @Column({ type: DataType.INTEGER })
-  medicamentoId: number;
+  remedioId: number;
 
   @Column({ type: DataType.STRING })
   justificativa: string;
 
   @Column({ type: DataType.STRING, defaultValue: 'pendente' }) // status: pendente | aprovada | recusada
   status: string;
+  
+@HasOne(() => Receita)
+receita: Receita;
+
+@ForeignKey(() => Receita)
+@Column({ type: DataType.INTEGER, allowNull: true })
+receitaId: number;
+
 }

@@ -1,16 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { HistoricoMedicamentoController } from './historico-medicamento.controller';
-import { HistoricoMedicamentoService } from './historico-medicamento.service';
+import { ReceitaController } from './receita.controller';
+import { ReceitaService } from './receita.service';
 
-describe('HistoricoMedicamentoController', () => {
-  let controller: HistoricoMedicamentoController;
+describe('ReceitaController', () => {
+  let controller: ReceitaController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [HistoricoMedicamentoController],
+      controllers: [ReceitaController],
       providers: [
         {
-          provide: HistoricoMedicamentoService,
+          provide: ReceitaService,
           useValue: {
             create: jest.fn(),
             findAll: jest.fn(),
@@ -22,7 +22,7 @@ describe('HistoricoMedicamentoController', () => {
       ],
     }).compile();
 
-    controller = module.get<HistoricoMedicamentoController>(HistoricoMedicamentoController);
+    controller = module.get<ReceitaController>(ReceitaController);
   });
 
   it('should be defined', () => {
