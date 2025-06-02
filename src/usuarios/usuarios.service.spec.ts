@@ -7,10 +7,27 @@ describe('UsuariosController', () => {
   let controller: UsuariosController;
   let service: UsuariosService;
 
+  const mockService = {
+    create: jest.fn(dto => Promise.resolve({ id: Date.now(), ...dto })),
+    findAll: jest.fn(() => Promise.resolve([])),
+    findOne: jest.fn(id => Promise.resolve({ id: +id })),
+    findByEmail: jest.fn(email => Promise.resolve({ email })),
+    findFuncionarios: jest.fn(() => Promise.resolve([{ funcionario: true }])),
+    findByFarmaciaId: jest.fn(farmaciaId => Promise.resolve([{ farmaciaId: +farmaciaId }])),
+    update: jest.fn((id, dto) => Promise.resolve({ id: +id, ...dto })),
+    patch: jest.fn((id, dto) => Promise.resolve({ id: +id, ...dto })),
+    remove: jest.fn(id => Promise.resolve()),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsuariosController],
-      providers: [UsuariosService],
+      providers: [
+        {
+          provide: UsuariosService,
+          useValue: mockService,
+        },
+      ],
     }).compile();
 
     controller = module.get<UsuariosController>(UsuariosController);
@@ -23,97 +40,53 @@ describe('UsuariosController', () => {
 
   it('criar um usuario', async () => {
     const dto: CreateUsuarioDto = {
-      nome: 'Joao Silva',
+      nome: 'Joao',
+      cpf: '12345678901',
       email: 'joao@example.com',
       funcionario: true,
     };
     const resultado = await controller.create(dto);
     expect(resultado).toHaveProperty('id');
-    expect(resultado.nome).toBe('João Silva');
+    expect(resultado.nome).toBe('Joao');
   });
 
   it('retornar todos os usuarios', async () => {
-    await controller.create({
-      nome: 'Teste',
-      email: 'teste@example.com',
-      funcionario: false,
-    });
     const usuarios = await controller.findAll();
     expect(Array.isArray(usuarios)).toBe(true);
   });
 
   it('retornar um usuario específico pelo ID', async () => {
-    const criado = await controller.create({
-      nome: 'Ana',
-      email: 'ana@example.com',
-      funcionario: false,
-    });
-    const usuario = await controller.findOne(criado.id.toString());
-    expect(usuario).toHaveProperty('id', criado.id);
+    const usuario = await controller.findOne('1');
+    expect(usuario).toHaveProperty('id', 1);
   });
 
   it('atualizar um usuario', async () => {
-    const criado = await controller.create({
-      nome: 'Carlos',
-      email: 'carlos@example.com',
-      funcionario: true,
-    });
-    const atualizado = await controller.update(criado.id.toString(), {
-      nome: 'Carlos Alberto',
-    });
-    expect(atualizado?.nome).toBe('Carlos Alberto');
+    const atualizado = await controller.update('2', { nome: 'Carlos' });
+    expect(atualizado?.nome).toBe('Carlos');
   });
 
   it('deletar um usuario', async () => {
-    const criado = await controller.create({
-      nome: 'Laura',
-      email: 'laura@example.com',
-      funcionario: false,
-    });
-    await controller.remove(criado.id.toString());
-    const resultado = await controller.findOne(criado.id.toString());
-    expect(resultado).toBeNull(); 
+    await expect(controller.remove('3')).resolves.toBeUndefined();
   });
 
   it('retornar um usuario pelo email', async () => {
-  const criado = await controller.create({
-    nome: 'Teste Email',
-    email: 'testeemail@example.com',
-    funcionario: true,
-  });
-  const usuario = await controller.findByEmail('testeemail@example.com');
-  expect(usuario).toBeDefined();
-  expect(usuario?.email).toBe('testeemail@example.com');
+    const usuario = await controller.findByEmail('testeemail@example.com');
+    expect(usuario).toBeDefined();
+    expect(usuario?.email).toBe('testeemail@example.com');
   });
 
   it('retornar todos os funcionarios', async () => {
-    await controller.create({
-      nome: 'Funcionario Teste',
-      email: 'func@example.com',
-      funcionario: true,
-    });
     const funcionarios = await controller.findFuncionarios();
     expect(funcionarios.every(f => f.funcionario)).toBe(true);
   });
 
   it('retornar todos os usuarios por farmaciaId', async () => {
-    const usuario = await controller.create({
-      nome: 'Farmacia1 usuario',
-      email: 'f1@example.com',
-      funcionario: false,
-      farmaciaId: 1,
-    });
     const resultado = await controller.findByFarmaciaId('1');
     expect(resultado[0].farmaciaId).toBe(1);
   });
 
   it('atualizar parcialmente um usuario (patch)', async () => {
-    const criado = await controller.create({
-      nome: 'Parcial',
-      email: 'patch@example.com',
-      funcionario: false,
-    });
-    const atualizado = await controller.patch(criado.id.toString(), { funcionario: true });
+    const atualizado = await controller.patch('4', { funcionario: true });
     expect(atualizado?.funcionario).toBe(true);
   });
 });

@@ -33,6 +33,8 @@ export class UsuariosService {
   }
 
   async update(id: number, updateUsuarioDto: UpdateUsuarioDto): Promise<Usuario | null> {
+    const usuario = await this.findOne(id);
+    if (!usuario) return null;
     await this.usuarioModel.update(updateUsuarioDto, { where: { id } });
     return this.findOne(id);
   }
