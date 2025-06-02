@@ -12,7 +12,7 @@ export class ReceitaService {
   ) {}
 
   async create(dto: CreateReceitaDto): Promise<Receita> {
-    return this.receitaModel.create(dto);
+    return this.receitaModel.create(dto as any);
   }
 
   async findAll(): Promise<Receita[]> {

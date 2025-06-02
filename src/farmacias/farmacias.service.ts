@@ -11,28 +11,28 @@ export class FarmaciasService {
     private farmaciaModel: typeof Farmacia,
   ) {}
 
-  create(dto: CreateFarmaciaDto) {
-  return this.farmaciaModel.create({ ...dto });
-}
+ create(dto: CreateFarmaciaDto): Promise<Farmacia> {
+    return this.farmaciaModel.create({ ...dto });
+  }
 
-
-  findAll() {
+  findAll(): Promise<Farmacia[]> {
     return this.farmaciaModel.findAll();
   }
 
-  findOne(id: number) {
+  findOne(id: number): Promise<Farmacia | null> {
     return this.farmaciaModel.findByPk(id);
   }
 
-  findByBairro(bairro: string) {
+  findByBairro(bairro: string): Promise<Farmacia[]> {
     return this.farmaciaModel.findAll({ where: { bairro } });
   }
 
-  update(id: number, dto: UpdateFarmaciaDto) {
+  update(id: number, dto: UpdateFarmaciaDto): Promise<[number]> { //sequelize retorna array no update, por isso nao eh promise farmacia
+   
     return this.farmaciaModel.update(dto, { where: { id } });
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<{ message: string }> {
     const farmacia = await this.findOne(id);
     if (farmacia) await farmacia.destroy();
     return { message: 'Farmácia removida' };
