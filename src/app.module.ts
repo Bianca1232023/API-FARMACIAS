@@ -4,10 +4,11 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Farmacia } from './farmacias/farmacias.model';
-
 import { FarmaciasModule } from './farmacias/farmacias.module';
 
+
 @Module({
+
   imports: [
     SequelizeModule.forRoot({
       dialect: 'postgres',
@@ -27,3 +28,4 @@ import { FarmaciasModule } from './farmacias/farmacias.module';
 })
 
 export class AppModule {}
+
