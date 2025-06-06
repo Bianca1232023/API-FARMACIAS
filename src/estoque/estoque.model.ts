@@ -1,18 +1,23 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement } from 'sequelize-typescript';
 
 @Table({ tableName: 'estoque', timestamps: false })
-export class Estoque extends Model {
+export class Estoque extends Model<Estoque> {
+  @ApiProperty()
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.INTEGER)
   declare id: number;
 
+  @ApiProperty()
   @Column(DataType.INTEGER)
   farmaciaId: number;
 
+  @ApiProperty()
   @Column(DataType.INTEGER)
   remedioId: number;
 
+  @ApiProperty()
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
