@@ -10,8 +10,7 @@ describe('RemediosService', () => {
   const remedioExemplo = {
     id: 1,
     nome: 'Paracetamol',
-    dosagem: 500,
-    quantidade: 'Comprimido',
+    dosagem: '500 mg',
     categoria: 'Analgésico',
     principio_ativo: 'paracetamol',
     fabricante: 'Genéricos LTDA',
@@ -51,8 +50,7 @@ describe('RemediosService', () => {
   it('deve criar um remédio', async () => {
     const result = await service.create({
       nome: 'Paracetamol',
-      dosagem: 500,
-      quantidade: 'Comprimido',
+      dosagem: '500 mg',
       categoria: 'Analgésico',
       principio_ativo: 'paracetamol',
       fabricante: 'Genéricos LTDA',

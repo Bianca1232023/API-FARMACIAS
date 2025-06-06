@@ -149,6 +149,4 @@ export class RemediosController {
     return this.remediosService.updateFabricante(id, body.fabricante);
   }
 
-
-
 }

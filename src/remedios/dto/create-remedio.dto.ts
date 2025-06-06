@@ -8,10 +8,6 @@ export class CreateRemedioDto {
 
   @IsString()
   @IsNotEmpty()
-  quantidade: string;
-
-  @IsString()
-  @IsNotEmpty()
   principio_ativo: string;
 
   @IsString()
@@ -20,7 +16,7 @@ export class CreateRemedioDto {
 
   @IsNumber()
   @IsNotEmpty()
-  dosagem: number;
+  dosagem: string;
 
   @IsString()
   @IsNotEmpty()
