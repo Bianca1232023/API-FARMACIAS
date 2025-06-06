@@ -121,37 +121,34 @@ export class RemediosController {
     return this.remediosService.remove(+id);
   }
 
-  @Get('validade/vencidos')
-  @ApiOperation({ summary: 'Listar todos os remédios vencidos' })
-  @ApiResponse({ status: 200, description: 'Lista de remédios vencidos retornada com sucesso.' })
-  @ApiResponse({ status: 404, description: 'Nenhum remédio vencido encontrado.' })
-  findExpiredRemedios() {
-    return this.remediosService.findExpiredRemedios();
+  @Get('dosagem/:dosagem')
+  @ApiOperation({ summary: 'Listar remédios por dosagem' })
+  @ApiParam({ name: 'dosagem', type: Number })
+  @ApiResponse({ status: 200, description: 'Remédios com a dosagem retornados com sucesso.' })
+  @ApiResponse({ status: 404, description: 'Nenhum remédio com essa dosagem encontrado.' })
+  findByDosagem(@Param('dosagem') dosagem: number) {
+  return this.remediosService.findByDosagem(dosagem);
   }
 
-  @Get('validade/vencendo/:dias')
-  @ApiOperation({ summary: 'Listar remédios que vencerão em até X dias' })
-  @ApiParam({ name: 'dias', type: Number })
-  @ApiResponse({ status: 200, description: 'Lista de remédios que estão próximos do vencimento retornada com sucesso.' })
-  @ApiResponse({ status: 404, description: 'Nenhum remédio próximo do vencimento encontrado.' })
-  findExpiringRemedios(@Param('dias', ParseIntPipe) dias: number) {
-    return this.remediosService.findExpiringRemedios(dias);
+  @Get('fabricante/:fabricante')
+  @ApiOperation({ summary: 'Listar remédios por fabricante' })
+  @ApiParam({ name: 'fabricante', type: String })
+  @ApiResponse({ status: 200, description: 'Remédios retornados com sucesso.' })
+  @ApiResponse({ status: 404, description: 'Nenhum remédio encontrado com esse fabricante.' })
+  findByFabricante(@Param('fabricante') fabricante: string) {
+    return this.remediosService.findByFabricante(fabricante);
   }
 
-  @Delete('validade/vencidos')
-  @ApiOperation({ summary: 'Remover todos os remédios vencidos' })
-  @ApiResponse({ status: 200, description: 'Remédios vencidos removidos com sucesso.' })
-  @ApiResponse({ status: 404, description: 'Nenhum remédio vencido encontrado para remover.' })
-  removeExpiredRemedios() {
-    return this.remediosService.removeExpiredRemedios();
+  @Patch(':id/fabricante')
+  @ApiOperation({ summary: 'Atualizar fabricante de um remédio por ID' })
+  @ApiParam({ name: 'id', type: Number })
+  @ApiBody({ schema: { properties: { fabricante: { type: 'string' } } } })
+  @ApiResponse({ status: 200, description: 'Fabricante atualizado com sucesso.' })
+  @ApiResponse({ status: 404, description: 'Remédio não encontrado.' })
+  updateFabricante(@Param('id', ParseIntPipe) id: number, @Body() body: { fabricante: string }) {
+    return this.remediosService.updateFabricante(id, body.fabricante);
   }
 
-  @Get('ordenar/validade')
-  @ApiOperation({ summary: 'Listar todos os remédios ordenados por validade' })
-  @ApiResponse({ status: 200, description: 'Lista de remédios ordenada por validade retornada com sucesso.' })
-  @ApiResponse({ status: 404, description: 'Nenhum remédio encontrado.' })
-  getAllOrderedByValidade() {
-    return this.remediosService.getAllOrderedByValidade();
-  }
+
 
 }

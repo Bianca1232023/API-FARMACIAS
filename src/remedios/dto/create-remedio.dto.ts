@@ -1,4 +1,4 @@
-import { IsDate, IsNotEmpty, IsString } from 'class-validator';
+import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateRemedioDto {
@@ -18,9 +18,14 @@ export class CreateRemedioDto {
   @IsNotEmpty()
   categoria: string;
 
-  @Type(() => Date)
-  @IsDate()
-  validade: Date;
+  @IsNumber()
+  @IsNotEmpty()
+  dosagem: number;
+
+  @IsString()
+  @IsNotEmpty()
+  fabricante: string;
+
 }
 
 
