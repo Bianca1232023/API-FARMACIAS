@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { RemediosService } from './remedios.service';
 import { CreateRemedioDto } from './dto/create-remedio.dto';
 import { UpdateRemedioDto } from './dto/update-remedio.dto';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
 @Controller('remedios')
 export class RemediosController {
@@ -35,5 +36,15 @@ export class RemediosController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.remediosService.remove(+id);
+  }
+}
+
+@ApiTags('farmacias') 
+@Controller('farmacias')
+export class FarmaciaController {
+  @Get()
+  @ApiOperation({ summary: 'Lista todas as farmácias' })
+  findAll() {
+    return [];
   }
 }

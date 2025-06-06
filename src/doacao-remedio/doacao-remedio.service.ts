@@ -12,7 +12,7 @@ export class DoacaoRemedioService {
   ) {}
 
   async create(dto: CreateDoacaoRemedioDto) {
-    return await this.doacaoRemedioModel.create(dto);
+    return await this.doacaoRemedioModel.create(dto as any);
   }
 
   async findAll() {
