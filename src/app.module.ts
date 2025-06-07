@@ -3,31 +3,14 @@ import Sequelize from 'sequelize';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-<<<<<<<<< Temporary merge branch 1
 import { Farmacia } from './farmacias/farmacias.model';
 import { DoacaoRemedio } from './doacao-remedio/doacao-remedio.model';
 import { DoacaoRemedioModule } from './doacao-remedio/doacao-remedio.module';
 import { FarmaciasModule } from './farmacias/farmacias.module';
-
-@Module({
-  imports: [
-    SequelizeModule.forRoot({
-      dialect: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'livialyrio',
-      password: '123456',
-      database: 'db_farmaciasDigitaisSociais',
-      models: [Farmacia],
-      autoLoadModels: true,
-      synchronize: true,
-    }),
-    FarmaciasModule,
-  ],
-=========
-import { SequelizeModule } from '@nestjs/sequelize';
 import { Estoque } from './estoque/estoque.model';
 import { EstoqueModule } from './estoque/estoque.module';
+import { Usuario } from './usuarios/usuarios.model';
+import { UsuariosModule } from './usuarios/usuarios.module';
 
 @Module({
   imports: [SequelizeModule.forRoot({
@@ -37,11 +20,11 @@ import { EstoqueModule } from './estoque/estoque.module';
       username: 'livialyrio',
       password: '123456',
       database: 'db_farmaciasDigitaisSociais',
-      models: [Estoque],
+      models: [Estoque, Farmacia, Usuario, DoacaoRemedio],
       autoLoadModels: true,
       synchronize: true,
     }),
-    EstoqueModule,
+    EstoqueModule, FarmaciasModule, UsuariosModule, DoacaoRemedioModule,
   ],
   controllers: [AppController],
   providers: [AppService],
