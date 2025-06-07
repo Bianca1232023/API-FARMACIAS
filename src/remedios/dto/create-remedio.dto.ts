@@ -1,12 +1,27 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateRemedioDto {
-  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
   nome: string;
 
-  @ApiProperty()
-  quantidade: string;
-
-  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
   principio_ativo: string;
+
+  @IsString()
+  @IsNotEmpty()
+  categoria: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  dosagem: string;
+
+  @IsString()
+  @IsNotEmpty()
+  fabricante: string;
+
 }
+
+

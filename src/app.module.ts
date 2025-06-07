@@ -15,6 +15,7 @@ import { EstoqueModule } from './estoque/estoque.module';
 import { Estoque } from './estoque/estoque.model';
 
 @Module({
+
   imports: [
     SequelizeModule.forRoot({
       dialect: 'postgres',
