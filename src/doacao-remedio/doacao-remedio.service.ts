@@ -11,9 +11,9 @@ export class DoacaoRemedioService {
     private readonly doacaoRemedioModel: typeof DoacaoRemedio,
   ) {}
 
-async create(dto: CreateDoacaoRemedioDto): Promise<DoacaoRemedio> {
-  return await this.doacaoRemedioModel.create({ ...dto });
-}
+  async create(dto: CreateDoacaoRemedioDto) {
+    return await this.doacaoRemedioModel.create(dto);
+  }
 
 async findAll(): Promise<DoacaoRemedio[]> {
   return await this.doacaoRemedioModel.findAll();

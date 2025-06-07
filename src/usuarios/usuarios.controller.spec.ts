@@ -2,6 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsuariosController } from './usuarios.controller';
 import { UsuariosService } from './usuarios.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
+import { Controller, Get } from '@nestjs/common';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
+
 
 describe('UsuariosController', () => {
   let controller: UsuariosController;
@@ -91,3 +94,13 @@ describe('UsuariosController', () => {
     expect(patched?.funcionario).toBe(true);
   });
 });
+
+@ApiTags('farmacias') // Categoria no Swagger
+@Controller('farmacias')
+export class FarmaciaController {
+  @Get()
+  @ApiOperation({ summary: 'Lista todas as farmácias' })
+  findAll() {
+    return [];
+  }
+}
