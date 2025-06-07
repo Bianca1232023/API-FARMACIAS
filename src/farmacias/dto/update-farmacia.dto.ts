@@ -4,6 +4,10 @@ import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class UpdateFarmaciaDto extends PartialType(CreateFarmaciaDto) {
+      @ApiPropertyOptional({ example: 1, description: 'ID de farmácia' })
+      @IsNumber()
+      farmaciaId: number;
+
       @ApiPropertyOptional({ example: '22222-222', description: 'CEP da farmácia' })
       @IsOptional()
       @IsString()
