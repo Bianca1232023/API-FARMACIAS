@@ -1,36 +1,27 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement } from 'sequelize-typescript';
 
-export interface EstoqueAttributes {
-  id: number;
-  farmaciaId: number;
-  remedioId: number;
-  quantidade_disponivel: number;
-}
-
-export interface EstoqueCreationAttributes extends Omit<EstoqueAttributes, 'id'> {}
-
-@Table({
-  tableName: 'estoque',
-  timestamps: false,
-})
-export class Estoque extends Model<EstoqueAttributes, EstoqueCreationAttributes> {
+@Table({ tableName: 'estoque', timestamps: false })
+export class Estoque extends Model<Estoque> {
+  @ApiProperty()
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.INTEGER)
   declare id: number;
 
+  @ApiProperty()
   @Column(DataType.INTEGER)
   farmaciaId: number;
 
+  @ApiProperty()
   @Column(DataType.INTEGER)
   remedioId: number;
 
+  @ApiProperty()
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
-    validate: {
-      min: 0,
-    },
+    validate: { min: 0 },
     field: 'quantidade_disponivel',
   })
   quantidade_disponivel: number;

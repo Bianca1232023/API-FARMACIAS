@@ -1,14 +1,12 @@
-import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, ForeignKey, BelongsTo, PrimaryKey } from 'sequelize-typescript';
 import { Usuario } from '../usuarios/usuarios.model';
 import { Remedio } from '../remedios/remedios.model';
 
 @Table({ tableName: 'doacoes_remedios', timestamps: false })
 export class DoacaoRemedio extends Model {
-  @Column({
-    type: DataType.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-  })
+  @PrimaryKey
+  @Column({type: DataType.INTEGER, autoIncrement: true, primaryKey: true})  
+  doacaoRemedioId: number;
 
   @ForeignKey(() => Usuario)
   @Column(DataType.INTEGER)

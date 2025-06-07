@@ -1,7 +1,11 @@
-import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, PrimaryKey } from 'sequelize-typescript';
 
-@Table
+@Table({ tableName: 'farmacias', timestamps: false }) 
 export class Farmacia extends Model {
+  @PrimaryKey
+  @Column({type: DataType.INTEGER, autoIncrement: true, primaryKey: true})  
+  farmaciaId: number;
+
   @Column({ type: DataType.STRING(10), allowNull: false })
   cep: string;
 

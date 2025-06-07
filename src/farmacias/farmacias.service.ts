@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Farmacia } from './farmacias.model';
 import { CreateFarmaciaDto } from './dto/create-farmacia.dto';
 import { UpdateFarmaciaDto } from './dto/update-farmacia.dto';
+import { Op, fn, col, where } from 'sequelize';
 
 @Injectable()
 export class FarmaciasService {
@@ -11,31 +12,46 @@ export class FarmaciasService {
     private farmaciaModel: typeof Farmacia,
   ) {}
 
- create(dto: CreateFarmaciaDto): Promise<Farmacia> {
-    return this.farmaciaModel.create({ ...dto });
+ async create(dto: CreateFarmaciaDto): Promise<Farmacia> {
+    return await this.farmaciaModel.create({ ...dto });
   }
 
-  findAll(): Promise<Farmacia[]> {
-    return this.farmaciaModel.findAll();
+  async findAll(): Promise<Farmacia[]> {
+    return await this.farmaciaModel.findAll();
   }
 
-  findOne(id: number): Promise<Farmacia | null> {
-    return this.farmaciaModel.findByPk(id);
+  async findOne(id: number): Promise<Farmacia | null> {
+    return await this.farmaciaModel.findByPk(id);
   }
 
-  findByBairro(bairro: string): Promise<Farmacia[]> {
-    return this.farmaciaModel.findAll({ where: { bairro } });
+  async findByBairro(bairro: string): Promise<Farmacia[]> {
+    return await this.farmaciaModel.findAll({
+      where: where(
+        fn('LOWER', col('bairro')),
+        bairro.toLowerCase()
+      )
+    });
   }
 
-  update(id: number, dto: UpdateFarmaciaDto): Promise<[number]> { //sequelize retorna array no update, por isso nao eh promise farmacia
+  async findByCidade(cidade: string): Promise<Farmacia[]> {
+    return await this.farmaciaModel.findAll({
+      where: where(
+        fn('LOWER', col('cidade')),
+        cidade.toLowerCase()
+      )
+    });
+  }
+
+  async update(id: number, dto: UpdateFarmaciaDto): Promise<[number]> { //sequelize retorna array no update, por isso nao eh promise farmacia
    
-    return this.farmaciaModel.update(dto, { where: { id } });
+    return await this.farmaciaModel.update(dto, { where: { farmaciaId: id } });
   }
 
   async remove(id: number): Promise<{ message: string }> {
-    const farmacia = await this.findOne(id);
+    const farmacia = await this.farmaciaModel.findOne({ where: { farmaciaId: id } });
     if (farmacia) await farmacia.destroy();
     return { message: 'Farmácia removida' };
   }
+
 }
 

@@ -43,6 +43,15 @@ export class FarmaciasController {
     return this.service.findByBairro(bairro);
   }
 
+  @Get('cidade/:cidade')
+  @ApiOperation({ summary: 'Buscar farmácias por cidade' })
+  @ApiParam({ name: 'cidade', description: 'Nome da cidade' })
+  @ApiResponse({ status: 200, description: 'Lista de farmácias encontradas.' })
+  @ApiResponse({ status: 404, description: 'Nenhuma farmácia encontrada para a cidade especificada.' })
+  findByCidade(@Param('cidade') cidade: string) {
+    return this.service.findByCidade(cidade);
+  }
+
   @Patch(':id')
   @ApiOperation({ summary: 'Atualizar farmácia' })
   @ApiParam({ name: 'id', description: 'ID da farmácia' })

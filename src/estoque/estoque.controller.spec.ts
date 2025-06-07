@@ -12,17 +12,15 @@ describe('EstoqueController', () => {
       findAll: jest.fn(),
       findOne: jest.fn(),
       update: jest.fn(),
+      patch: jest.fn(),
       remove: jest.fn(),
+      findByFarmacia: jest.fn(),
+      findByRemedio: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [EstoqueController],
-      providers: [
-        {
-          provide: EstoqueService,
-          useValue: mockService,
-        },
-      ],
+      providers: [{ provide: EstoqueService, useValue: mockService }],
     }).compile();
 
     controller = module.get<EstoqueController>(EstoqueController);
@@ -33,37 +31,69 @@ describe('EstoqueController', () => {
     expect(controller).toBeDefined();
   });
 
-  it('deve chamar service.create() ao criar estoque', async () => {
-    const dto = { farmaciaId: 1, remedioId: 2, quantidade_disponivel: 10 };
-    jest.spyOn(service, 'create').mockResolvedValue(dto as any);
+  it('criar um novo item de estoque', async () => {
+    const dto = { 
+      farmaciaId: 1, 
+      remedioId: 2, 
+      quantidade_disponivel: 10 
+    };
 
-    expect(await controller.create(dto)).toEqual(dto);
+    (service.create as jest.Mock).mockResolvedValue(dto);
+    const result = await controller.create(dto);
+    expect(result).toEqual(dto);
   });
 
-  it('deve retornar todos os estoques', async () => {
+  it('retorna todos os estoques', async () => {
     const result = [{ id: 1 }, { id: 2 }];
-    jest.spyOn(service, 'findAll').mockResolvedValue(result as any);
 
-    expect(await controller.findAll()).toEqual(result);
+    (service.findAll as jest.Mock).mockResolvedValue(result);
+    const estoques = await controller.findAll();
+    expect(estoques).toEqual(result);
   });
 
-  it('deve retornar um estoque pelo id', async () => {
+  it('retorna estoque por id', async () => {
     const result = { id: 1 };
-    jest.spyOn(service, 'findOne').mockResolvedValue(result as any);
 
-    expect(await controller.findOne('1')).toEqual(result);
+    (service.findOne as jest.Mock).mockResolvedValue(result);
+    const estoque = await controller.findOne('1');
+    expect(estoque).toEqual(result);
   });
 
-  it('deve atualizar um estoque', async () => {
+  it('atualiza item de estoque com PUT', async () => {
     const dto = { quantidade_disponivel: 8 };
-    jest.spyOn(service, 'update').mockResolvedValue([1] as any);
 
-    expect(await controller.update('1', dto)).toEqual([1]);
+    (service.update as jest.Mock).mockResolvedValue([1]);
+    const updated = await controller.update('1', dto);
+    expect(updated).toEqual([1]);
   });
 
-  it('deve remover um estoque', async () => {
-    jest.spyOn(service, 'remove').mockResolvedValue(1 as any);
+  it('atualiza item de estoque com PATCH', async () => {
+    const dto = { quantidade_disponivel: 15 };
 
-    expect(await controller.remove('1')).toEqual(1);
+    (service.patch as jest.Mock).mockResolvedValue([1]);
+    const patched = await controller.patch('1', dto);
+    expect(patched).toEqual([1]);
+  });
+
+  it('remove um estoque', async () => {
+    (service.remove as jest.Mock).mockResolvedValue(1);
+    const removed = await controller.remove('1');
+    expect(removed).toEqual(1);
+  });
+
+  it('retorna estoques por farmacia', async () => {
+    const data = [{ id: 1, farmaciaId: 5 }];
+
+    (service.findByFarmacia as jest.Mock).mockResolvedValue(data);
+    const result = await controller.findByFarmacia('5');
+    expect(result).toEqual(data);
+  });
+
+  it('retorna estoques por remedio', async () => {
+    const data = [{ id: 2, remedioId: 3 }];
+
+    (service.findByRemedio as jest.Mock).mockResolvedValue(data);
+    const result = await controller.findByRemedio('3');
+    expect(result).toEqual(data);
   });
 });
