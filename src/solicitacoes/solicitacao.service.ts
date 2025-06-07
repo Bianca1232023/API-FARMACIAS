@@ -14,7 +14,7 @@ export class SolicitacoesService {
   ) {}
 
   async create(dto: CreateSolicitacaoDto): Promise<Solicitacao> {
-    return this.solicitacaoModel.create(dto);
+    return this.solicitacaoModel.create(dto as any);
   }
 
   async findAll(): Promise<Solicitacao[]> {
