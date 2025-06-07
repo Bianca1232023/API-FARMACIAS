@@ -34,11 +34,11 @@ describe('UsuariosController', () => {
     service = module.get<UsuariosService>(UsuariosService);
   });
 
-  it('definir o controlador', () => {
+  it('Definir o controlador', () => {
     expect(controller).toBeDefined();
   });
 
-  it('criar um usuario', async () => {
+  it('Criar um usuario', async () => {
     const dto: CreateUsuarioDto = {
       nome: 'Joao',
       cpf: '12345678901',
@@ -50,43 +50,43 @@ describe('UsuariosController', () => {
     expect(result.nome).toBe('Joao');
   });
 
-  it('retornar todos os usuarios', async () => {
+  it('Retornar todos os usuarios', async () => {
     const usuarios = await controller.findAll();
     expect(Array.isArray(usuarios)).toBe(true);
   });
 
-  it('retornar um usuario pelo ID', async () => {
+  it('Retornar um usuario pelo ID', async () => {
     const usuario = await controller.findOne('1');
     expect(usuario).toHaveProperty('id', 1);
   });
 
-  it('atualizar usuario', async () => {
+  it('Atualizar usuario', async () => {
     const updated = await controller.update('2', { nome: 'Carlos' });
     expect(updated?.nome).toBe('Carlos');
   });
 
-  it('deletar um usuario', async () => {
+  it('Deletar um usuario', async () => {
     const result = await controller.remove('3');
     expect(result).toBeUndefined();
   });
 
-  it('retornar um usuario pelo email', async () => {
+  it('Retornar um usuario pelo email', async () => {
     const usuario = await controller.findByEmail('emailteste@example.com');
     expect(usuario).toBeDefined();
     expect(usuario?.email).toBe('emailteste@example.com');
   });
 
-  it('retornar apenas os usuarios que sao funcionarios', async () => {
+  it('Retornar apenas os usuarios que sao funcionarios', async () => {
     const funcionarios = await controller.findFuncionarios();
     expect(funcionarios.every(f => f.funcionario)).toBe(true);
   });
 
-  it('retornar usuarios pelo ID da farmacia', async () => {
+  it('RRetornar usuarios pelo ID da farmacia', async () => {
     const result = await controller.findByFarmaciaId('1');
     expect(result[0].farmaciaId).toBe(1);
   });
 
-  it('atualizar parcialmente um usuario (PATCH)', async () => {
+  it('Atualizar parcialmente um usuario (PATCH)', async () => {
     const patched = await controller.patch('4', { funcionario: true });
     expect(patched?.funcionario).toBe(true);
   });
