@@ -1,44 +1,47 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Estoque } from './estoque.model';
 import { CreateEstoqueDto } from './dto/create-estoque.dto';
 import { UpdateEstoqueDto } from './dto/update-estoque.dto';
-import { CreationAttributes } from 'sequelize';
+import { Estoque } from './estoque.model';
 
 @Injectable()
 export class EstoqueService {
-  constructor(
-    @InjectModel(Estoque) private estoqueModel: typeof Estoque) {}
+  constructor(@InjectModel(Estoque) private estoqueModel: typeof Estoque) {}
 
-  create(dto: CreationAttributes<Estoque>) {
-    return this.estoqueModel.create(dto);
+  async create(dto: CreateEstoqueDto) {
+    return await this.estoqueModel.create(dto as any);
   }
 
-  findAll() {
-    return this.estoqueModel.findAll();
+  async findAll() {
+    return await this.estoqueModel.findAll();
   }
 
-  findOne(id: number) {
-    return this.estoqueModel.findByPk(id);
+  async findOne(id: number) {
+    const estoque = await this.estoqueModel.findByPk(id);
+    if (!estoque) throw new NotFoundException('Estoque não encontrado');
+    return estoque;
   }
 
-  update(id: number, dto: UpdateEstoqueDto) {
-    return this.estoqueModel.update(dto, { where: { id } });
+  async update(id: number, dto: UpdateEstoqueDto) {
+    const estoque = await this.findOne(id);
+    return await estoque.update(dto);
   }
 
-  patch(id: number, dto: Partial<UpdateEstoqueDto>) {
-    return this.estoqueModel.update(dto, { where: { id } });
+  async patch(id: number, dto: UpdateEstoqueDto) {
+    return this.update(id, dto);
   }
 
-  remove(id: number) {
-    return this.estoqueModel.destroy({ where: { id } });
+  async remove(id: number) {
+    const estoque = await this.findOne(id);
+    await estoque.destroy();
+    return { message: 'Estoque removido com sucesso' };
   }
 
-  findByFarmacia(farmaciaId: number) {
-    return this.estoqueModel.findAll({ where: { farmaciaId } });
+  async findByFarmacia(farmaciaId: number) {
+    return await this.estoqueModel.findAll({ where: { farmaciaId } });
   }
 
-  findByRemedio(remedioId: number) {
-    return this.estoqueModel.findAll({ where: { remedioId } });
+  async findByRemedio(remedioId: number) {
+    return await this.estoqueModel.findAll({ where: { remedioId } });
   }
 }

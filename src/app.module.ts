@@ -6,6 +6,9 @@ import { UsuariosModule } from './usuarios/usuarios.module';
 import { Usuario } from './usuarios/usuarios.model';
 import { Farmacia } from './farmacias/farmacias.model';
 import { FarmaciasModule } from './farmacias/farmacias.module';
+import { Estoque } from './estoque/estoque.model';
+import { EstoqueModule } from './estoque/estoque.module';
+
 
 @Module({
   imports: [SequelizeModule.forRoot({
@@ -15,11 +18,11 @@ import { FarmaciasModule } from './farmacias/farmacias.module';
       username: 'livialyrio',
       password: '123456',
       database: 'db_farmaciasDigitaisSociais',
-      models: [Usuario],
+      models: [Usuario, Estoque, Farmacia],
       autoLoadModels: true,
       synchronize: true,
     }),
-    UsuariosModule
+    UsuariosModule, EstoqueModule, FarmaciasModule,
   ],
   controllers: [AppController],
   providers: [AppService],
