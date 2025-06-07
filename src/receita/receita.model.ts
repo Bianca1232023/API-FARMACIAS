@@ -22,4 +22,7 @@ export class Receita extends Model<Receita> {
     allowNull: false,
   })
   solicitacaoId: number;
+
+  @Column({ type: DataType.DATE, allowNull: false }) //INCLUI DATA DA CRIACAO DA RECEITA !!!!!!
+dataReceita: Date;
 }

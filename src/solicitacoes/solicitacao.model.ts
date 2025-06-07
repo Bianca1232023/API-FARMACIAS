@@ -1,6 +1,8 @@
 import { Column, DataType, ForeignKey, Model, Table, HasOne } from 'sequelize-typescript';
 
 import { Receita } from '../receita/receita.model';
+import { Usuario } from '../usuarios/usuarios.model';
+import { Remedio } from '../remedios/remedios.model';
 
 @Table
 export class Solicitacao extends Model<Solicitacao> {
@@ -19,8 +21,16 @@ export class Solicitacao extends Model<Solicitacao> {
 @HasOne(() => Receita)
 receita: Receita;
 
-@ForeignKey(() => Receita)
-@Column({ type: DataType.INTEGER, allowNull: true })
-receitaId: number;
+  @ForeignKey(() => Remedio)
+  @Column
+  remediosId: number;
+  
+
+  @ForeignKey(() => Receita)
+  @Column({ type: DataType.INTEGER, allowNull: true })
+  receitaId: number;
+
+  @Column({ type: DataType.DATE, defaultValue: DataType.NOW })
+  dataCriacao: Date;
 
 }

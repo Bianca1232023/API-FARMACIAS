@@ -1,5 +1,12 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 export class CreateRemedioDto {
-    nome: string;
-    quantidade: string;
-    principio_ativo: string;
+  @ApiProperty()
+  nome: string;
+
+  @ApiProperty()
+  quantidade: string;
+
+  @ApiProperty()
+  principio_ativo: string;
 }

@@ -34,4 +34,25 @@ export class ReceitaService {
     const receita = await this.findById(id);
     await receita.destroy();
   }
+
+  async verificarValidade(id: number): Promise<{ validade: boolean; diasRestantes: number }> {
+    const receita = await this.receitaModel.findByPk(id);
+
+    if (!receita) {
+      throw new NotFoundException('Receita não encontrada.');
+    }
+
+    const hoje = new Date();
+    const dataCriacao = new Date(receita.dataReceita);
+    const diasDeValidade = 30;
+
+    const diferencaEmMilissegundos = hoje.getTime() - dataCriacao.getTime();
+    const diasPassados = Math.floor(diferencaEmMilissegundos / (1000 * 60 * 60 * 24));
+    const diasRestantes = diasDeValidade - diasPassados;
+
+    return {
+      validade: diasRestantes > 0,
+      diasRestantes: diasRestantes < 0 ? 0 : diasRestantes,
+    };
+  }
 }

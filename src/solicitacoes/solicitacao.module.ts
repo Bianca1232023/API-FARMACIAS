@@ -8,5 +8,6 @@ import { SolicitacoesController } from './solicitacao.controller';
   imports: [SequelizeModule.forFeature([Solicitacao])],
   controllers: [SolicitacoesController],
   providers: [SolicitacoesService],
+   exports: [SolicitacoesService]
 })
 export class SolicitacoesModule {}

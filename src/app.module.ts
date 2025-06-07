@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import Sequelize from 'sequelize';
 import { SequelizeModule } from '@nestjs/sequelize';
+import Sequelize from 'sequelize';
+import { SequelizeModule } from '@nestjs/sequelize';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Farmacia } from './farmacias/farmacias.model';
@@ -34,3 +36,6 @@ import { Estoque } from './estoque/estoque.model';
 })
 
 export class AppModule {}
+
+
+
