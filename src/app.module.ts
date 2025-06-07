@@ -6,6 +6,12 @@ import { AppService } from './app.service';
 import { Farmacia } from './farmacias/farmacias.model';
 
 import { FarmaciasModule } from './farmacias/farmacias.module';
+import { Estoque } from './estoque/estoque.model';
+import { Usuario } from './usuarios/usuarios.model';
+import { DoacaoRemedio } from './doacao-remedio/doacao-remedio.model';
+import { DoacaoRemedioModule } from './doacao-remedio/doacao-remedio.module';
+import { UsuariosModule } from './usuarios/usuarios.module';
+import { EstoqueModule } from './estoque/estoque.module';
 
 @Module({
   imports: [
