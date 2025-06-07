@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Body, Param, Put, Patch, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Patch, Delete, Query, BadRequestException, ParseIntPipe } from '@nestjs/common';
 import { EstoqueService } from './estoque.service';
 import { CreateEstoqueDto } from './dto/create-estoque.dto';
 import { UpdateEstoqueDto } from './dto/update-estoque.dto';
 import { Estoque } from './estoque.model';
-import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('estoque')
 @Controller('estoque')
@@ -82,5 +82,20 @@ export class EstoqueController {
   findByRemedio(@Param('remedioId') remedioId: string) {
     return this.service.findByRemedio(+remedioId);
   }
+
+
+  /*@Get(':remedioId/disponivel')
+  @ApiOperation({ summary: 'Verificar se um remédio está disponível no estoque' })
+  @ApiResponse({ status: 200, description: 'Disponibilidade do remédio verificada com sucesso.', type: Boolean })
+  @ApiResponse({ status: 400, description: 'Ocorreu um erro na requisição' })
+  @ApiParam({ name: 'remedioId', type: Number })
+  async verificarDisponibilidade(
+    @Param('remedioId', ParseIntPipe) remedioId: number,
+  ): Promise<{ disponivel: boolean }> {
+    const disponivel = await this.service.verificarDisponibilidade(remedioId);
+    return { disponivel };
+  }*/
+
+
 }
 

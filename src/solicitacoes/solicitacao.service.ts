@@ -29,6 +29,12 @@ export class SolicitacoesService {
     return solicitacao;
   }
 
+  async listarSolicitacoesPorUsuario(usuarioId: number): Promise<Solicitacao[]> {
+    return this.solicitacaoModel.findAll({
+      where: { usuarioId },
+    });
+  }
+
   async update(id: number, dto: UpdateSolicitacaoDto): Promise<Solicitacao> {
     const solicitacao = await this.findById(id);
     return solicitacao.update(dto);

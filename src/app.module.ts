@@ -11,6 +11,8 @@ import { Usuario } from './usuarios/usuarios.model';
 import { UsuariosModule } from './usuarios/usuarios.module';
 import { Remedio } from './remedios/remedios.model';
 import { RemediosModule } from './remedios/remedios.module';
+import { EstoqueModule } from './estoque/estoque.module';
+import { Estoque } from './estoque/estoque.model';
 
 @Module({
   imports: [
@@ -21,11 +23,11 @@ import { RemediosModule } from './remedios/remedios.module';
       username: 'livialyrio',
       password: '123456',
       database: 'db_farmaciasDigitaisSociais',
-      models: [Farmacia, DoacaoRemedio, Usuario, Remedio],
+      models: [Farmacia, DoacaoRemedio, Usuario, Remedio, Estoque],
       autoLoadModels: true,
       synchronize: true,
     }),
-    FarmaciasModule, DoacaoRemedioModule, UsuariosModule, RemediosModule
+    FarmaciasModule, DoacaoRemedioModule, UsuariosModule, RemediosModule, EstoqueModule
   ],
   controllers: [AppController],
   providers: [AppService],
