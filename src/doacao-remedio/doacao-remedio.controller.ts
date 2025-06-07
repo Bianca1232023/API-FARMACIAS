@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common'
 import { DoacaoRemedioService } from './doacao-remedio.service';
 import { CreateDoacaoRemedioDto } from './dto/create-doacao-remedio.dto';
 import { UpdateDoacaoRemedioDto } from './dto/update-doacao-remedio.dto';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
 
 @ApiTags('Doações-Remédios') 
 @Controller('doacoes-remedios')
@@ -60,14 +61,5 @@ export class DoacaoRemedioController {
   @ApiResponse({ status: 404, description: 'Doação não encontrada.' })
   remove(@Param('id') id: string) {
     return this.service.remove(+id);
-  }
-}
-@ApiTags('farmacias') // Categoria no Swagger
-@Controller('farmacias')
-export class FarmaciaController {
-  @Get()
-  @ApiOperation({ summary: 'Lista todas as farmácias' })
-  findAll() {
-    return [];
   }
 }

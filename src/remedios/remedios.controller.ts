@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Put } 
 import { RemediosService } from './remedios.service';
 import { CreateRemedioDto } from './dto/create-remedio.dto';
 import { UpdateRemedioDto } from './dto/update-remedio.dto';
+import { ApiTags, ApiOperation, ApiParam, ApiBody, ApiResponse } from '@nestjs/swagger';
 
 @ApiTags('remedios')
 @Controller('remedios')
@@ -119,4 +120,33 @@ export class RemediosController {
   remove(@Param('id') id: string) {
     return this.remediosService.remove(+id);
   }
+
+  @Get('dosagem/:dosagem')
+  @ApiOperation({ summary: 'Listar remédios por dosagem' })
+  @ApiParam({ name: 'dosagem', type: Number })
+  @ApiResponse({ status: 200, description: 'Remédios com a dosagem retornados com sucesso.' })
+  @ApiResponse({ status: 404, description: 'Nenhum remédio com essa dosagem encontrado.' })
+  findByDosagem(@Param('dosagem') dosagem: number) {
+  return this.remediosService.findByDosagem(dosagem);
+  }
+
+  @Get('fabricante/:fabricante')
+  @ApiOperation({ summary: 'Listar remédios por fabricante' })
+  @ApiParam({ name: 'fabricante', type: String })
+  @ApiResponse({ status: 200, description: 'Remédios retornados com sucesso.' })
+  @ApiResponse({ status: 404, description: 'Nenhum remédio encontrado com esse fabricante.' })
+  findByFabricante(@Param('fabricante') fabricante: string) {
+    return this.remediosService.findByFabricante(fabricante);
+  }
+
+  @Patch(':id/fabricante')
+  @ApiOperation({ summary: 'Atualizar fabricante de um remédio por ID' })
+  @ApiParam({ name: 'id', type: Number })
+  @ApiBody({ schema: { properties: { fabricante: { type: 'string' } } } })
+  @ApiResponse({ status: 200, description: 'Fabricante atualizado com sucesso.' })
+  @ApiResponse({ status: 404, description: 'Remédio não encontrado.' })
+  updateFabricante(@Param('id', ParseIntPipe) id: number, @Body() body: { fabricante: string }) {
+    return this.remediosService.updateFabricante(id, body.fabricante);
+  }
+
 }

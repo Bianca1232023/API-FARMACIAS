@@ -4,8 +4,9 @@ import { Remedio } from '../remedios/remedios.model';
 
 @Table({ tableName: 'doacoes_remedios', timestamps: false })
 export class DoacaoRemedio extends Model {
-  @Column({ type: DataType.INTEGER, primaryKey: true, autoIncrement: true })
-  id: number;
+  @PrimaryKey
+  @Column({type: DataType.INTEGER, autoIncrement: true, primaryKey: true})  
+  doacaoRemedioId: number;
 
   @ForeignKey(() => Usuario)
   @Column(DataType.INTEGER)
