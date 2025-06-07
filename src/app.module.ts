@@ -18,10 +18,14 @@ import { Estoque } from './estoque/estoque.model';
   imports: [
     SequelizeModule.forRoot({
       dialect: 'postgres',
-      host: 'bsi.cefet-rj.br',
-      port: 15432,
-      username: 'livialyrio',
-      password: '123456',
+      //host: 'bsi.cefet-rj.br',
+      host: 'localhost',
+      //port: 15432,
+      port: 5432,
+      //username: 'livialyrio',
+      username: 'postgres',
+      //password: '123456',
+      password: 'root',
       database: 'db_farmaciasDigitaisSociais',
       models: [Farmacia, DoacaoRemedio, Usuario, Remedio, Estoque],
       autoLoadModels: true,
