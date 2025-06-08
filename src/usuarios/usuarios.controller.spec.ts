@@ -9,7 +9,7 @@ describe('UsuariosController', () => {
 
   beforeEach(async () => {
     const mockService = {
-      create: jest.fn(dto => ({ id: Date.now(), ...dto })),
+      create: jest.fn(dto => ({ id: 1, ...dto })),
       findAll: jest.fn(() => Promise.resolve([])),
       findOne: jest.fn(id => Promise.resolve({ id: Number(id) })),
       update: jest.fn((id, dto) => Promise.resolve({ id: Number(id), ...dto })),
@@ -81,7 +81,7 @@ describe('UsuariosController', () => {
     expect(funcionarios.every(f => f.funcionario)).toBe(true);
   });
 
-  it('RRetornar usuarios pelo ID da farmacia', async () => {
+  it('Retornar usuarios pelo ID da farmacia', async () => {
     const result = await controller.findByFarmaciaId('1');
     expect(result[0].farmaciaId).toBe(1);
   });
@@ -90,4 +90,25 @@ describe('UsuariosController', () => {
     const patched = await controller.patch('4', { funcionario: true });
     expect(patched?.funcionario).toBe(true);
   });
+
+// Regra de negócio: CPF e email são obrigatórios para cadastro completo
+it('Deve lançar erro se tentar cadastrar um usuário sem CPF ou email', async () => {
+  const dto: any = { nome: 'Fulano', funcionario: false };
+  try {
+    await controller.create(dto);
+  } catch (e) {
+    expect(e.message).toBe('CPF e Email são obrigatórios');
+  }
+});
+
+// REGRA DE NEGÓCIO: Evitar duplicidade de CPF.
+it('Deve lançar erro ao tentar cadastrar CPF já existente', async () => {
+  service.findByEmail = jest.fn(() => Promise.resolve(null));
+  service.create = jest.fn(() => { throw new Error('CPF já cadastrado'); });
+  try {
+    await controller.create({ nome: 'Fulano', cpf: '123', email: 'a@a.com', funcionario: false } as any);
+  } catch (e) {
+    expect(e.message).toBe('CPF já cadastrado');
+  }
+});
 });
