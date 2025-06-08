@@ -2,6 +2,10 @@ import { IsNotEmpty, IsNumber, IsDate } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateDoacaoRemedioDto {
+  @ApiProperty({ example: 1, description: 'ID da solicitação' })
+  @IsNumber()
+  solicitacaoId: number;
+
   @ApiProperty({ example: 1, description: 'ID do usuário' })
   @IsNumber()
   usuarioId: number;

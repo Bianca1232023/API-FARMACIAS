@@ -33,12 +33,12 @@ export class SolicitacaoController {
     return this.solicitacaoService.HistoricoSolicitacao();
   }
 
-  @Patch(':id/aprovar') //APROVAR AS SOLICITACOES DE REMEDIO
+ /* @Patch(':id/aprovar') //APROVAR AS SOLICITACOES DE REMEDIO
   @ApiOperation({ summary: 'Aprovar solicitação' })
    async aprovarSolicitacao(@Param('id', ParseIntPipe) id: number) {
     return this.solicitacaoService.aprovarSolicitacao(id);
   
-}
+}*/
 }
 
 @Controller('solicitacoes')

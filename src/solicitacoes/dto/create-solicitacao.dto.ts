@@ -8,7 +8,11 @@ export class CreateSolicitacaoDto {
 
   @ApiProperty()
   @IsNumber()
-  medicamentoId: number;
+  remedioId: number;
+
+  @ApiProperty()
+  @IsNumber()
+  farmaciaid: number;
 
   @ApiProperty()
   @IsString()

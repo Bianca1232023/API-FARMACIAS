@@ -2,7 +2,6 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Put } 
 import { RemediosService } from './remedios.service';
 import { CreateRemedioDto } from './dto/create-remedio.dto';
 import { UpdateRemedioDto } from './dto/update-remedio.dto';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { ApiTags, ApiOperation, ApiParam, ApiBody, ApiResponse } from '@nestjs/swagger';
 
 @ApiTags('remedios')
@@ -134,7 +133,7 @@ export class FarmaciaController {
 }
 
 
-  @Get('dosagem/:dosagem')
+  /*@Get('dosagem/:dosagem')
   @ApiOperation({ summary: 'Listar remédios por dosagem' })
   @ApiParam({ name: 'dosagem', type: Number })
   @ApiResponse({ status: 200, description: 'Remédios com a dosagem retornados com sucesso.' })
@@ -162,4 +161,4 @@ export class FarmaciaController {
     return this.remediosService.updateFabricante(id, body.fabricante);
   }
 
-}
+}*/

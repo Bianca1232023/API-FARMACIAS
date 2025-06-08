@@ -11,11 +11,11 @@ export class Estoque extends Model<Estoque> {
 
   @ApiProperty()
   @Column(DataType.INTEGER)
-  farmaciaId: number;
+  declare farmaciaId: number;
 
   @ApiProperty()
   @Column(DataType.INTEGER)
-  remedioId: number;
+  declare remedioId: number;
 
   @ApiProperty()
   @Column({
@@ -24,6 +24,5 @@ export class Estoque extends Model<Estoque> {
     validate: { min: 0 },
     field: 'quantidade_disponivel',
   })
-  quantidade_disponivel: number;
-  quantidade: number;
+  declare quantidade_disponivel: number;
 }

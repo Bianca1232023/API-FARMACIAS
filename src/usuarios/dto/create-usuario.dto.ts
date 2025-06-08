@@ -5,7 +5,7 @@ export class CreateUsuarioDto {
   nome: string;
 
   @ApiProperty({ required: false })
-  dataNascimento?: string;
+  dataNascimento?: Date;
 
   @ApiProperty()
   email: string;

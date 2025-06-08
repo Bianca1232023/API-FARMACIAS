@@ -13,6 +13,10 @@ import { Remedio } from './remedios/remedios.model';
 import { RemediosModule } from './remedios/remedios.module';
 import { EstoqueModule } from './estoque/estoque.module';
 import { Estoque } from './estoque/estoque.model';
+import { Solicitacao } from './solicitacoes/solicitacao.model';
+import { SolicitacoesModule } from './solicitacoes/solicitacao.module';
+import { Receita } from './receita/receita.model';
+import { ReceitaModule } from './receita/receita-module';
 
 @Module({
 
@@ -28,11 +32,11 @@ import { Estoque } from './estoque/estoque.model';
       //password: '123456',
       password: 'root',
       database: 'db_farmaciasDigitaisSociais',
-      models: [Farmacia, DoacaoRemedio, Usuario, Remedio, Estoque],
+      models: [Farmacia, DoacaoRemedio, Usuario, Remedio, Estoque, Solicitacao, Receita],
       autoLoadModels: true,
       synchronize: true,
     }),
-    FarmaciasModule, DoacaoRemedioModule, UsuariosModule, RemediosModule, EstoqueModule
+    FarmaciasModule, DoacaoRemedioModule, UsuariosModule, RemediosModule, EstoqueModule, SolicitacoesModule, ReceitaModule
   ],
   controllers: [AppController],
   providers: [AppService],

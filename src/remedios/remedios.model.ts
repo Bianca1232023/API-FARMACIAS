@@ -2,7 +2,8 @@ import { STRING } from 'sequelize';
 import { Table, Column, Model, DataType } from 'sequelize-typescript';
 import { Col } from 'sequelize/types/utils';
 
-@Table
+
+@Table({tableName: 'remedios', timestamps: false })
 export class Remedio extends Model {
   @Column({ type: DataType.STRING(100), allowNull: false })
   nome: string;

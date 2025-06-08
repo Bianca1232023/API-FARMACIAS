@@ -52,7 +52,7 @@ export class SolicitacoesService {
     });
   }
 
-  async aprovarSolicitacao(id: number) { //ENDPOINT PARA APROVAR SOLICITACAO DE REMEDIO
+  /*async aprovarSolicitacao(id: number) { //ENDPOINT PARA APROVAR SOLICITACAO DE REMEDIO
   const solicitacao = await this.solicitacaoModel.findByPk(id);
   if (!solicitacao) {
     throw new NotFoundException('Solicitação não encontrada.');
@@ -80,6 +80,6 @@ export class SolicitacoesService {
     solicitacao,
   };
   
-}
+}*/
 
 }
