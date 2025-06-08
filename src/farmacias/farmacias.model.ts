@@ -22,4 +22,7 @@ export class Farmacia extends Model {//contempla regra de negocio: uma farmacia 
   @Column({ type: DataType.INTEGER, allowNull: false  })
   numero: number;
 
+  @HasMany(() => Estoque)
+  declare estoques: Estoque[];
+
 }

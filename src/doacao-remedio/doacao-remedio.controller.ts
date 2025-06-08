@@ -65,7 +65,7 @@ export class DoacaoRemedioController {
   
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Remover doação de remédio por ID' })
+  @ApiOperation({ summary: 'Remover doação por ID' })
   @ApiParam({ name: 'id', type: Number })
   @ApiResponse({ status: 200, description: 'Doação removida com sucesso.' })
   @ApiResponse({ status: 404, description: 'Doação não encontrada.' })

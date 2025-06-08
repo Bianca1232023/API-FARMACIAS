@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Put, Patch, Delete, Query, BadRequestException, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Patch, Delete, ParseIntPipe } from '@nestjs/common';
 import { EstoqueService } from './estoque.service';
 import { CreateEstoqueDto } from './dto/create-estoque.dto';
 import { UpdateEstoqueDto } from './dto/update-estoque.dto';
@@ -14,6 +14,7 @@ export class EstoqueController {
   @Get('aviso')
   @ApiOperation({ summary: 'Lista remédios com estoque baixo (<= 3)' })
   @ApiResponse({ status: 200, description: 'Lista de remédios com estoque baixo.' })
+  @ApiResponse({ status: 204, description: 'Não tem nennhum remédio com estoque baixo.' })
   async findLowStock() {
     return this.service.findLowStock();
   }
