@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Put, Patch, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Patch, Delete, ParseIntPipe } from '@nestjs/common';
 import { EstoqueService } from './estoque.service';
 import { CreateEstoqueDto } from './dto/create-estoque.dto';
 import { UpdateEstoqueDto } from './dto/update-estoque.dto';
@@ -10,6 +10,13 @@ import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiResponse, ApiTa
 export class EstoqueController {
   estoqueService: any;
   constructor(private readonly service: EstoqueService) {}
+
+  @Get('aviso')
+  @ApiOperation({ summary: 'Lista remédios com estoque baixo (<= 3)' })
+  @ApiResponse({ status: 200, description: 'Lista de remédios com estoque baixo.' })
+  async findLowStock() {
+    return this.service.findLowStock();
+  } 
 
   @Post()
   @ApiOperation({ summary: 'Criar um novo item de estoque' })
@@ -41,20 +48,22 @@ export class EstoqueController {
   @ApiOperation({ summary: 'Atualiza item de estoque por completo PUT' })
   @ApiResponse({ status: 200, description: 'Estoque atualizado com sucesso.', type: Estoque })
   @ApiResponse({ status: 400, description: 'Dados inválidos.' })
+  @ApiResponse({ status: 404, description: 'Estoque não encontrado ou removido pois a quantidade zerou.' })
   @ApiParam({ name: 'id', type: Number })
   @ApiBody({ type: UpdateEstoqueDto })
-  update(@Param('id') id: string, @Body() updateDto: UpdateEstoqueDto) {
-    return this.service.update(+id, updateDto);
+  async update(@Param('id', ParseIntPipe) id: number, @Body() updateDto: UpdateEstoqueDto) {
+    return await this.service.update(id, updateDto);
   }
 
   @Patch(':id')
   @ApiOperation({ summary: 'Atualiza parcialmente um estoque com patch' })
   @ApiResponse({ status: 200, description: 'Estoque atualizado parcialmente com sucesso.', type: Estoque })
   @ApiResponse({ status: 400, description: 'Dados inválidos.' })
+  @ApiResponse({ status: 404, description: 'Estoque não encontrado ou removido pois a quantidade zerou.' })
   @ApiParam({ name: 'id', type: Number })
   @ApiBody({ type: UpdateEstoqueDto })
-  patch(@Param('id') id: string, @Body() dto: Partial<UpdateEstoqueDto>) {
-    return this.service.patch(+id, dto);
+  async patch(@Param('id', ParseIntPipe) id: number, @Body() dto: Partial<UpdateEstoqueDto>) {
+    return await this.service.patch(id, dto);
   }
 
   @Delete(':id')
@@ -101,6 +110,18 @@ export class EstoqueController {
       Number(remedioId),
       quantidade,
     );
+  }
+
+  @Get(':remedioId/disponivel')
+  @ApiOperation({ summary: 'Verificar se um remédio está disponível no estoque' })
+  @ApiResponse({ status: 200, description: 'Disponibilidade do remédio verificada com sucesso.', type: Boolean })
+  @ApiResponse({ status: 400, description: 'Ocorreu um erro na requisição' })
+  @ApiParam({ name: 'remedioId', type: Number })
+  async verificarDisponibilidade(
+    @Param('remedioId', ParseIntPipe) remedioId: number,
+  ): Promise<{ disponivel: boolean }> {
+    const disponivel = await this.service.verificarDisponibilidade(remedioId);
+    return { disponivel };
   }
 
 }

@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { CreateEstoqueDto } from './dto/create-estoque.dto';
 import { UpdateEstoqueDto } from './dto/update-estoque.dto';
 import { Estoque } from './estoque.model';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class EstoqueService {
@@ -22,13 +23,26 @@ export class EstoqueService {
     return estoque;
   }
 
-  async update(id: number, dto: UpdateEstoqueDto) {
+//regra de negocio: ao atualizar o estoque, se a quantidade disponível for menor ou igual a zero, o estoque deve ser removido
+async update(id: number, updateDto: UpdateEstoqueDto): Promise<Estoque> {
     const estoque = await this.findOne(id);
-    return await estoque.update(dto);
+    await estoque.update(updateDto);
+    if (estoque.quantidade_disponivel <= 0) {
+      await this.remove(estoque.estoqueId);
+      throw new NotFoundException(`Estoque com ID ${id} foi removido pois a quantidade zerou.`);
+    }
+    return estoque;
   }
 
-  async patch(id: number, dto: UpdateEstoqueDto) {
-    return this.update(id, dto);
+//regra de negocio: ao atualizar o estoque, se a quantidade disponível for menor ou igual a zero, o estoque deve ser removido
+  async patch(id: number, dto: Partial<UpdateEstoqueDto>): Promise<Estoque> {
+    const estoque = await this.findOne(id);
+    await estoque.update(dto);
+    if (estoque.quantidade_disponivel <= 0) {
+      await this.remove(estoque.estoqueId);
+      throw new NotFoundException(`Estoque com ID ${id} foi removido pois a quantidade zerou.`); 
+    }
+    return estoque;
   }
 
   async remove(id: number) {
@@ -67,4 +81,20 @@ export class EstoqueService {
       estoque,
     };
   }
+
+  async verificarDisponibilidade(remedioId: number): Promise<boolean> {
+    const remedio = await this.estoqueModel.findOne({
+      where: { remedioId },
+    });
+    return !!remedio; // retorna true se encontrou, false caso contrário
+  }
+
+//regra de negocio para aviso de estoque baixo estoque baixo
+ async findLowStock() {
+  return await this.estoqueModel.findAll({//esse endpoint retorna todos os remédios com estoque baixo e posteriormente o aviso de fato será implementado com o front-end
+    where: {
+      quantidade_disponivel: { [Op.lte]: 3 },
+    },
+  });
+}
 }
