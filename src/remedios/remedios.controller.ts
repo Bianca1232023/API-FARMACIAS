@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Put } from '@nestjs/common'; // <-- Adicione ParseIntPipe aqui
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Put, UseGuards } from '@nestjs/common'; 
 import { RemediosService } from './remedios.service';
 import { CreateRemedioDto } from './dto/create-remedio.dto';
 import { UpdateRemedioDto } from './dto/update-remedio.dto';
 import { ApiTags, ApiOperation, ApiParam, ApiBody, ApiResponse } from '@nestjs/swagger';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @ApiTags('remedios')
 @Controller('remedios')
@@ -10,6 +11,7 @@ import { ApiTags, ApiOperation, ApiParam, ApiBody, ApiResponse } from '@nestjs/s
 export class RemediosController {
   constructor(private readonly remediosService: RemediosService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
   @ApiOperation({summary: 'cria novo remedio'})
   @ApiBody({ type: CreateRemedioDto})
@@ -55,7 +57,7 @@ export class RemediosController {
   } 
 
   @Get('principio_ativo/:principio_ativo')
-  @ApiOperation({summary: 'Lista o principio ativo do remedio'})
+  @ApiOperation({summary: 'Lista remedios com o principio ativo escrito'})
   @ApiParam({name: 'principio_ativo', type: String})
   @ApiResponse({ status: 201, description: 'principio ativo retornado com sucesso'})
   @ApiResponse({ status: 404, description: 'nenhuma categoria encontrada'})
@@ -63,6 +65,7 @@ export class RemediosController {
     return this.remediosService.findByPrincipio_Ativo(principio_ativo);
   }
 
+  @UseGuards(AuthGuard)
   @Put(':id')
   @ApiOperation({ summary: 'Atualizar remédio por ID' })
   @ApiParam({ name: 'id', type: Number })
@@ -73,14 +76,15 @@ export class RemediosController {
     return this.remediosService.updateAll(+id, updateRemedioDto);
   }
 
-  @Put(':id/nome')
-  @ApiOperation({ summary: 'Atualizar nome de remédio por ID' })
+  @UseGuards(AuthGuard)
+  @Patch(':id/principio_ativo')
+  @ApiOperation({ summary: 'Atualizar princípio ativo de um remédio por ID' })
   @ApiParam({ name: 'id', type: Number })
-  @ApiBody({ type: UpdateRemedioDto })
-  @ApiResponse({ status: 200, description: 'nome atualizado com sucesso.' })
-  @ApiResponse({ status: 404, description: 'nome não encontrado.' })
-  replaceNome(@Param('id') id: string,@Body() body: { nome: string }) {
-    return this.remediosService.replaceNome(+id, body.nome);
+  @ApiBody({ schema: { properties: { principio_ativo: { type: 'string' } } } })
+  @ApiResponse({ status: 200, description: 'Princípio ativo atualizado com sucesso.' })
+  @ApiResponse({ status: 404, description: 'Remédio não encontrado.' })
+  updatePrincipioAtivo(@Param('id') id: string, @Body() body: { principio_ativo: string }) {
+    return this.remediosService.updatePrincipioAtivo(id, body.principio_ativo);
   }
 
   @Get('nome/:nome')
@@ -92,7 +96,7 @@ export class RemediosController {
     return this.remediosService.findByNome(nome);
   }
 
-
+  @UseGuards(AuthGuard)
   @Patch(':id')
   @ApiOperation({ summary: 'Atualizar parcialmente um remédio por ID' })
   @ApiParam({ name: 'id', type: Number })
@@ -103,6 +107,7 @@ export class RemediosController {
     return this.remediosService.update(+id, updateRemedioDto);
   }
 
+  @UseGuards(AuthGuard)
   @Patch(':id/atualizar-categoria')
   @ApiOperation({ summary: 'Atualizar categoria de um remédio por ID' })
   @ApiParam({ name: 'id', type: Number })
@@ -112,6 +117,7 @@ export class RemediosController {
     return this.remediosService.updateCategoria(+id, body.categoria); 
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   @ApiOperation({ summary: 'Remover um remédio por ID' })
   @ApiParam({ name: 'id', type: Number })
@@ -123,10 +129,10 @@ export class RemediosController {
 
   @Get('dosagem/:dosagem')
   @ApiOperation({ summary: 'Listar remédios por dosagem' })
-  @ApiParam({ name: 'dosagem', type: Number })
+  @ApiParam({ name: 'dosagem', type: String })
   @ApiResponse({ status: 200, description: 'Remédios com a dosagem retornados com sucesso.' })
   @ApiResponse({ status: 404, description: 'Nenhum remédio com essa dosagem encontrado.' })
-  findByDosagem(@Param('dosagem') dosagem: number) {
+  findByDosagem(@Param('dosagem') dosagem: string) {
   return this.remediosService.findByDosagem(dosagem);
   }
 
@@ -139,6 +145,7 @@ export class RemediosController {
     return this.remediosService.findByFabricante(fabricante);
   }
 
+  @UseGuards(AuthGuard)
   @Patch(':id/fabricante')
   @ApiOperation({ summary: 'Atualizar fabricante de um remédio por ID' })
   @ApiParam({ name: 'id', type: Number })
