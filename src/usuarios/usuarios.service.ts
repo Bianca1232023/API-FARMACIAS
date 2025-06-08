@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Usuario } from './usuarios.model';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
-import { CreationAttributes } from 'sequelize';
 
 @Injectable()
 export class UsuariosService {
@@ -12,8 +11,18 @@ export class UsuariosService {
     private usuarioModel: typeof Usuario,
   ) {}
 
-  async create(createUsuarioDto: CreationAttributes<Usuario>): Promise<Usuario> {
-    return this.usuarioModel.create(createUsuarioDto);
+  // Regra de negócio: CPF e email são obrigatórios para cadastro completo
+  async create(createUsuarioDto: CreateUsuarioDto): Promise<Usuario> {
+    const { cpf, email } = createUsuarioDto;
+    if (!cpf || !email) {
+      throw new Error('CPF e Email são obrigatórios');
+    }
+    // Regra de negócio: CPF deve ser único
+    const cpfExists = await this.usuarioModel.findOne({ where: { cpf } });
+    if (cpfExists) {
+      throw new Error('CPF já cadastrado');
+    }
+    return this.usuarioModel.create(createUsuarioDto as any);
   }
 
   async findAll(): Promise<Usuario[]> {
@@ -32,14 +41,24 @@ export class UsuariosService {
     return this.usuarioModel.findAll({ where: { funcionario: true } });
   }
 
+  //Regra de negócio: Não permitir remover CPF nem email ao atualizar
   async update(id: number, updateUsuarioDto: UpdateUsuarioDto): Promise<Usuario | null> {
-    await this.usuarioModel.update(updateUsuarioDto, { where: { id } });
-    return this.findOne(id);
+    const { cpf, email } = updateUsuarioDto;
+    if (cpf == null || email == null) {
+      throw new Error('Não é permitido remover CPF ou Email');
+    }
+    const usuario = await this.findOne(id);
+    if (!usuario) return null;
+
+    await usuario.update(updateUsuarioDto);
+    return usuario;
   }
 
   async patch(id: number, data: Partial<UpdateUsuarioDto>): Promise<Usuario | null> {
-    await this.usuarioModel.update(data, { where: { id } });
-    return this.findOne(id);
+    const usuario = await this.findOne(id);
+    if (!usuario) return null;
+    await usuario.update(data);
+    return usuario;
   }
 
   async remove(id: number): Promise<void> {

@@ -3,7 +3,10 @@ import { RemediosService } from './remedios.service';
 import { CreateRemedioDto } from './dto/create-remedio.dto';
 import { UpdateRemedioDto } from './dto/update-remedio.dto';
 import { ApiTags, ApiOperation, ApiParam, ApiBody, ApiResponse } from '@nestjs/swagger';
+<<<<<<< HEAD
 import { AuthGuard } from 'src/auth/auth.guard';
+=======
+>>>>>>> origin/MariaGeral
 
 @ApiTags('remedios')
 @Controller('remedios')
@@ -126,6 +129,7 @@ export class RemediosController {
   remove(@Param('id') id: string) {
     return this.remediosService.remove(+id);
   }
+<<<<<<< HEAD
 }
 
 @ApiTags('farmacias') 
@@ -137,6 +141,8 @@ export class FarmaciaController {
     return [];
   }
 }
+=======
+>>>>>>> origin/MariaGeral
 
 
   /*@Get('dosagem/:dosagem')
@@ -168,4 +174,8 @@ export class FarmaciaController {
     return this.remediosService.updateFabricante(id, body.fabricante);
   }
 
+<<<<<<< HEAD
 }*/
+=======
+}
+>>>>>>> origin/MariaGeral

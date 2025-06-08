@@ -1,13 +1,7 @@
-import { STRING } from 'sequelize';
-import { Table, Column, Model, DataType, PrimaryKey, AllowNull } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, PrimaryKey } from 'sequelize-typescript';
 import { Col } from 'sequelize/types/utils';
 
-<<<<<<< HEAD
-
-@Table({tableName: 'remedios', timestamps: false })
-=======
 @Table({ tableName: 'remedios', timestamps: false })
->>>>>>> origin/CRUD-Remedios-Bianca
 export class Remedio extends Model {
   @PrimaryKey
   @Column({type: DataType.INTEGER, autoIncrement: true, primaryKey: true})  
@@ -26,5 +20,8 @@ export class Remedio extends Model {
 
   @Column({ type: DataType.STRING(50) })
   fabricante: string;
+
+  @Column({ type: DataType.INTEGER }) //
+  quantidade: number;
 
 }

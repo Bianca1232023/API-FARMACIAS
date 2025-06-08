@@ -62,7 +62,7 @@ export class SolicitacoesService {
   if (!remedio) {
     throw new NotFoundException('Remédio não encontrado.');
   }
-
+/*
   if (remedio.quantidade < 1) {
     throw new BadRequestException('Estoque insuficiente para aprovar a solicitação.');
   }
@@ -79,7 +79,7 @@ export class SolicitacoesService {
     message: 'Solicitação aprovada com sucesso.',
     solicitacao,
   };
-  
-}*/
-
+ */ 
 }
+
+

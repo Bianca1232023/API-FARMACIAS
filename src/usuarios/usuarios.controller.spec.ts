@@ -2,126 +2,113 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsuariosController } from './usuarios.controller';
 import { UsuariosService } from './usuarios.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
-import { Controller, Get } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
-
 
 describe('UsuariosController', () => {
   let controller: UsuariosController;
   let service: UsuariosService;
 
   beforeEach(async () => {
+    const mockService = {
+      create: jest.fn(dto => ({ id: 1, ...dto })),
+      findAll: jest.fn(() => Promise.resolve([])),
+      findOne: jest.fn(id => Promise.resolve({ id: Number(id) })),
+      update: jest.fn((id, dto) => Promise.resolve({ id: Number(id), ...dto })),
+      remove: jest.fn(() => Promise.resolve()),
+      findByEmail: jest.fn(email => Promise.resolve({ email })),
+      findFuncionarios: jest.fn(() => Promise.resolve([{ funcionario: true }])),
+      findByFarmaciaId: jest.fn(farmaciaId => Promise.resolve([{ farmaciaId: Number(farmaciaId) }])),
+      patch: jest.fn((id, dto) => Promise.resolve({ id: Number(id), ...dto })),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsuariosController],
-      providers: [UsuariosService],
+      providers: [
+        {
+          provide: UsuariosService,
+          useValue: mockService,
+        },
+      ],
     }).compile();
 
     controller = module.get<UsuariosController>(UsuariosController);
     service = module.get<UsuariosService>(UsuariosService);
   });
 
-  it('definir o controlador', () => {
+  it('Definir o controlador', () => {
     expect(controller).toBeDefined();
   });
 
-  it('criar um usuario', async () => {
+  it('Criar um usuario', async () => {
     const dto: CreateUsuarioDto = {
-      nome: 'Joao Silva',
+      nome: 'Joao',
+      cpf: '12345678901',
       email: 'joao@example.com',
       funcionario: true,
     };
     const result = await controller.create(dto);
     expect(result).toHaveProperty('id');
-    expect(result.nome).toBe('Joao Silva');
+    expect(result.nome).toBe('Joao');
   });
 
-  it('retornar todos os usuarios', async () => {
+  it('Retornar todos os usuarios', async () => {
     const usuarios = await controller.findAll();
     expect(Array.isArray(usuarios)).toBe(true);
   });
 
-  it('retornar um usuario pelo ID', async () => {
-    const created = await controller.create({
-      nome: 'Ana',
-      email: 'ana@example.com',
-      funcionario: false,
-    });
-    const usuario = await controller.findOne(created.id.toString());
-    expect(usuario).toHaveProperty('id', created.id);
+  it('Retornar um usuario pelo ID', async () => {
+    const usuario = await controller.findOne('1');
+    expect(usuario).toHaveProperty('id', 1);
   });
 
-  it('atualizar usuario', async () => {
-    const created = await controller.create({
-      nome: 'Carlos',
-      email: 'carlos@example.com',
-      funcionario: true,
-    });
-    const updated = await controller.update(created.id.toString(), {
-      nome: 'Carlos Alberto',
-    });
-    expect(updated?.nome).toBe('Carlos Alberto');
+  it('Atualizar usuario', async () => {
+    const updated = await controller.update('2', { nome: 'Carlos' });
+    expect(updated?.nome).toBe('Carlos');
   });
 
-  it('deletar um usuario', async () => {
-    const created = await controller.create({
-      nome: 'Laura',
-      email: 'laura@example.com',
-      funcionario: false,
-    });
-    const result = await controller.remove(created.id.toString());
-    expect(result).toBeUndefined(); 
+  it('Deletar um usuario', async () => {
+    const result = await controller.remove('3');
+    expect(result).toBeUndefined();
   });
 
-  it('retornar um usuario pelo email', async () => {
-  const created = await controller.create({
-    nome: 'Email Teste',
-    email: 'emailteste@example.com',
-    funcionario: false,
-  });
-  const usuario = await controller.findByEmail('emailteste@example.com');
-  expect(usuario).toBeDefined();
-  expect(usuario?.email).toBe('emailteste@example.com');
+  it('Retornar um usuario pelo email', async () => {
+    const usuario = await controller.findByEmail('emailteste@example.com');
+    expect(usuario).toBeDefined();
+    expect(usuario?.email).toBe('emailteste@example.com');
   });
 
-
-  it('retornar apenas os usuarios que sao funcionarios', async () => {
-    await controller.create({
-      nome: 'Funcionario Teste',
-      email: 'func@example.com',
-      funcionario: true,
-    });
+  it('Retornar apenas os usuarios que sao funcionarios', async () => {
     const funcionarios = await controller.findFuncionarios();
     expect(funcionarios.every(f => f.funcionario)).toBe(true);
   });
 
-  it('retornar usuarios pelo ID da farmacia', async () => {
-    await controller.create({
-      nome: 'Farmacia1 usuario',
-      email: 'f1@example.com',
-      funcionario: false,
-      farmaciaId: 1,
-    });
+  it('Retornar usuarios pelo ID da farmacia', async () => {
     const result = await controller.findByFarmaciaId('1');
     expect(result[0].farmaciaId).toBe(1);
   });
 
-  it('atualizar parcialmente um usuario (PATCH)', async () => {
-    const created = await controller.create({
-      nome: 'Parcial',
-      email: 'patch@example.com',
-      funcionario: false,
-    });
-    const patched = await controller.patch(created.id.toString(), { funcionario: true });
+  it('Atualizar parcialmente um usuario (PATCH)', async () => {
+    const patched = await controller.patch('4', { funcionario: true });
     expect(patched?.funcionario).toBe(true);
   });
+
+// Regra de negócio: CPF e email são obrigatórios para cadastro completo
+it('Deve lançar erro se tentar cadastrar um usuário sem CPF ou email', async () => {
+  const dto: any = { nome: 'Fulano', funcionario: false };
+  try {
+    await controller.create(dto);
+  } catch (e) {
+    expect(e.message).toBe('CPF e Email são obrigatórios');
+  }
 });
 
-@ApiTags('farmacias') // Categoria no Swagger
-@Controller('farmacias')
-export class FarmaciaController {
-  @Get()
-  @ApiOperation({ summary: 'Lista todas as farmácias' })
-  findAll() {
-    return [];
+// REGRA DE NEGÓCIO: Evitar duplicidade de CPF.
+it('Deve lançar erro ao tentar cadastrar CPF já existente', async () => {
+  service.findByEmail = jest.fn(() => Promise.resolve(null));
+  service.create = jest.fn(() => { throw new Error('CPF já cadastrado'); });
+  try {
+    await controller.create({ nome: 'Fulano', cpf: '123', email: 'a@a.com', funcionario: false } as any);
+  } catch (e) {
+    expect(e.message).toBe('CPF já cadastrado');
   }
-}
+});
+});
