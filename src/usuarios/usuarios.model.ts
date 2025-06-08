@@ -10,7 +10,7 @@ export class Usuario extends Model<Usuario> {
   nome: string;
 
   @ApiProperty()
-  @Column(DataType.STRING)
+  @Column({type: DataType.STRING(12), allowNull: false, unique: true})
   cpf: string;
 
   @ApiProperty({ required: false })
