@@ -63,3 +63,12 @@ export class DoacaoRemedioController {
     return this.service.remove(+id);
   }
 }
+@ApiTags('farmacias') // Categoria no Swagger
+@Controller('farmacias')
+export class FarmaciaController {
+  @Get()
+  @ApiOperation({ summary: 'Lista todas as farmácias' })
+  findAll() {
+    return [];
+  }
+}

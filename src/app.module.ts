@@ -15,6 +15,7 @@ import { FarmaciasModule } from './farmacias/farmacias.module';
 import { DoacaoRemedioModule } from './doacao-remedio/doacao-remedio.module';
 import { RemediosModule } from './remedios/remedios.module';
 import { ReceitaModule } from './receita/receita-module';
+import { SolicitacoesModule } from './solicitacoes/solicitacao.module';
 
 @Module({
   imports: [SequelizeModule.forRoot({
@@ -28,7 +29,7 @@ import { ReceitaModule } from './receita/receita-module';
       autoLoadModels: true,
       synchronize: true,
     }),
-    UsuariosModule, EstoqueModule, FarmaciasModule, DoacaoRemedioModule, RemediosModule, ReceitaModule, Solicitacao,
+    UsuariosModule, EstoqueModule, FarmaciasModule, DoacaoRemedioModule, RemediosModule, ReceitaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
