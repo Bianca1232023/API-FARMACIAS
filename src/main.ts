@@ -1,6 +1,9 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+//<<<<<<< HEAD
+//git=======
+import { AppModule } from './app.module';
+//>>>>>>> origin/CRUD-Remedios-Bianca
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
