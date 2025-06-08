@@ -1,4 +1,4 @@
-import {
+/*import {
   Injectable,
   CanActivate,
   ExecutionContext,
@@ -29,5 +29,11 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException('Token inválido ou expirado');
     }
   }
-}
+}*/
+
+import { Injectable } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+
+@Injectable()
+export class JwtAuthGuard extends AuthGuard('jwt') {}
 
