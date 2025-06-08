@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Put, Param, Delete, ParseIntPipe} from '@nestjs/common';
 import { FarmaciasService } from './farmacias.service';
 import { CreateFarmaciaDto } from './dto/create-farmacia.dto';
 import { UpdateFarmaciaDto } from './dto/update-farmacia.dto';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
 
 @ApiTags('Farmácias') //nome do grupo no swagger
 @Controller('farmacias')
@@ -57,8 +57,19 @@ export class FarmaciasController {
   @ApiParam({ name: 'id', description: 'ID da farmácia' })
   @ApiResponse({ status: 200, description: 'Farmácia atualizada com sucesso.' })
   @ApiResponse({ status: 400, description: 'Dados inválidos.' })
-  update(@Param('id') id: string, @Body() dto: UpdateFarmaciaDto) {
-    return this.service.update(+id, dto);
+  patch(@Param('id') id: string, @Body() dto: UpdateFarmaciaDto) {
+    return this.service.patch(+id, dto);
+  }
+
+  @Put(':id')
+  @ApiOperation({ summary: 'Atualiza farmácia por completo (PUT)' })
+  @ApiResponse({ status: 200, description: 'Farmácia atualizada com sucesso.' })
+  @ApiResponse({ status: 400, description: 'Dados inválidos.' })
+  @ApiResponse({ status: 404, description: 'Farmácia não encontrada.' })
+  @ApiParam({ name: 'id', type: Number, description: 'ID da farmácia a ser atualizada.' })
+  @ApiBody({ type: UpdateFarmaciaDto, description: 'Dados completos da farmácia para atualização.' })
+  async update(@Param('id', ParseIntPipe) id: number, @Body() updateDto: UpdateFarmaciaDto){
+    return await this.service.update(id, updateDto);
   }
 
   @Delete(':id')
@@ -69,6 +80,16 @@ export class FarmaciasController {
   remove(@Param('id') id: string) {
     return this.service.remove(+id);
   }
+
+  @Get('tem-remedio/:remedioId')
+  @ApiOperation({ summary: 'Listar farmácias que possuem um remédio específico em estoque' })
+  @ApiResponse({ status: 200, description: 'Lista de farmácias com o remédio em estoque.'})
+  @ApiResponse({ status: 404, description: 'Nenhuma farmácia encontrada com o remédio especificado em estoque.' })
+  @ApiParam({ name: 'remedioId', type: Number, description: 'ID do remédio para buscar.' })
+  async findPharmaciesByRemedioId(@Param('remedioId', ParseIntPipe) remedioId: number) {
+    return await this.service.findPharmaciesByRemedioId(remedioId);
+  }
+
 }
 @ApiTags('farmacias') // Categoria no Swagger
 @Controller('farmacias')

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, Patch } from '@nestjs/common';
 import { DoacaoRemedioService } from './doacao-remedio.service';
 import { CreateDoacaoRemedioDto } from './dto/create-doacao-remedio.dto';
 import { UpdateDoacaoRemedioDto } from './dto/update-doacao-remedio.dto';
@@ -53,6 +53,16 @@ export class DoacaoRemedioController {
   update(@Param('id') id: string, @Body() dto: UpdateDoacaoRemedioDto) {
     return this.service.update(+id, dto);
   }
+
+    @Patch(':id')
+    @ApiOperation({ summary: 'Atualizar doação' })
+    @ApiParam({ name: 'id', description: 'ID da doação' })
+    @ApiResponse({ status: 200, description: 'doação atualizada com sucesso.' })
+    @ApiResponse({ status: 400, description: 'Dados inválidos.' })
+    patch(@Param('id') id: string, @Body() dto: UpdateDoacaoRemedioDto) {
+      return this.service.patch(+id, dto);
+    }
+  
 
   @Delete(':id')
   @ApiOperation({ summary: 'Remover doação de remédio por ID' })

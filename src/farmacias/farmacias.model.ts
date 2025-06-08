@@ -1,4 +1,5 @@
-import { Table, Column, Model, DataType, PrimaryKey } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, PrimaryKey, HasMany } from 'sequelize-typescript';
+import { Estoque } from 'src/estoque/estoque.model';
 
 @Table({ tableName: 'farmacias', timestamps: false }) 
 export class Farmacia extends Model {
@@ -20,4 +21,7 @@ export class Farmacia extends Model {
 
   @Column({ type: DataType.INTEGER })
   numero: number;
+
+  @HasMany(() => Estoque)
+  estoques?: Estoque[]; 
 }

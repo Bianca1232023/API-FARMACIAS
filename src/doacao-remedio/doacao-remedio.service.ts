@@ -38,6 +38,13 @@ async update(id: number, dto: UpdateDoacaoRemedioDto): Promise<DoacaoRemedio> {
   return await doacao.update(dto);
 }
 
+async patch(id: number, partialDto: Partial<UpdateDoacaoRemedioDto>): Promise<DoacaoRemedio> {
+  const doacao = await this.findOne(id) as DoacaoRemedio;
+
+  await doacao.update(partialDto);
+
+  return doacao;
+}
 async remove(id: number): Promise<{ message: string }> {
   const doacao = await this.findOne(id);
   await doacao.destroy();

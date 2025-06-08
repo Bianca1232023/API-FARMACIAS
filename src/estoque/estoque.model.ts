@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement, ForeignKey } from 'sequelize-typescript';
+import { Farmacia } from 'src/farmacias/farmacias.model';
 
 @Table({ tableName: 'estoque', timestamps: false })
 export class Estoque extends Model<Estoque> {
@@ -9,10 +10,12 @@ export class Estoque extends Model<Estoque> {
   @Column(DataType.INTEGER)
   declare estoqueId: number;
 
+  @ForeignKey(() => Farmacia)
   @ApiProperty()
   @Column(DataType.INTEGER)
   declare farmaciaId: number;
 
+  @ForeignKey(() => Farmacia)
   @ApiProperty()
   @Column(DataType.INTEGER)
   declare remedioId: number;

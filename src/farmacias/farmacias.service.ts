@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Farmacia } from './farmacias.model';
 import { CreateFarmaciaDto } from './dto/create-farmacia.dto';
 import { UpdateFarmaciaDto } from './dto/update-farmacia.dto';
 import { Op, fn, col, where } from 'sequelize';
+import { Estoque } from 'src/estoque/estoque.model';
 
 @Injectable()
 export class FarmaciasService {
@@ -42,9 +43,20 @@ export class FarmaciasService {
     });
   }
 
-  async update(id: number, dto: UpdateFarmaciaDto): Promise<[number]> { //sequelize retorna array no update, por isso nao eh promise farmacia
-   
-    return await this.farmaciaModel.update(dto, { where: { farmaciaId: id } });
+ async update(id: number, updateDto: UpdateFarmaciaDto): Promise<Farmacia> {
+    const farmacia = await this.findOne(id) as Farmacia;
+
+    await farmacia.update(updateDto);
+
+    return farmacia;
+  }
+
+  async patch(id: number, partialDto: Partial<UpdateFarmaciaDto>): Promise<Farmacia> {
+    const farmacia = await this.findOne(id) as Farmacia;
+
+    await farmacia.update(partialDto);
+
+    return farmacia;
   }
 
   async remove(id: number): Promise<{ message: string }> {
@@ -52,6 +64,22 @@ export class FarmaciasService {
     if (farmacia) await farmacia.destroy();
     return { message: 'Farmácia removida' };
   }
+
+  async findPharmaciesByRemedioId(remedioId: number): Promise<Farmacia[]> {
+    const farmacias = await this.farmaciaModel.findAll({
+      include: [{model: Estoque, as: 'estoques', required: true, 
+        where: {remedioId: remedioId,quantidade_disponivel: {[Op.gt]: 0,},},
+      }],
+
+    });
+
+    if (!farmacias || farmacias.length === 0) {
+      throw new NotFoundException(`Nenhuma farmácia encontrada com o remédio ID ${remedioId} em estoque.`);
+    }
+
+    return farmacias;
+  }
+
 
 }
 
