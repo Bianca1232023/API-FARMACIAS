@@ -2,11 +2,7 @@ import { Controller, Get, Post, Body, Patch, Put, Param, Delete, ParseIntPipe} f
 import { FarmaciasService } from './farmacias.service';
 import { CreateFarmaciaDto } from './dto/create-farmacia.dto';
 import { UpdateFarmaciaDto } from './dto/update-farmacia.dto';
-<<<<<<< HEAD
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
-=======
-import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
->>>>>>> origin/MariaGeral
 
 @ApiTags('Farmácias') //nome do grupo no swagger
 @Controller('farmacias')

@@ -41,7 +41,8 @@ describe('UsuariosController', () => {
   it('Criar um usuario', async () => {
     const dto: CreateUsuarioDto = {
       nome: 'Joao',
-      cpf: '12345678901',
+      dataNascimento: new Date('2000-02-02'),
+      cpf: '123.654.789-02',
       email: 'joao@example.com',
       funcionario: true,
     };

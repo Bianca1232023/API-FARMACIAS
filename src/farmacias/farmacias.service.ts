@@ -65,7 +65,6 @@ export class FarmaciasService {
     return { message: 'Farmácia removida' };
   }
 
-<<<<<<< HEAD
   async findPharmaciesByRemedioId(remedioId: number): Promise<Farmacia[]> {
     const farmacias = await this.farmaciaModel.findAll({
       include: [{model: Estoque, as: 'estoques', required: true, 
@@ -84,6 +83,3 @@ export class FarmaciasService {
 
 }
 
-=======
-}
->>>>>>> origin/MariaGeral

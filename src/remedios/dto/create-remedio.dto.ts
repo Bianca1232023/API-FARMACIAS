@@ -29,10 +29,6 @@ export class CreateRemedioDto {
   @IsNotEmpty()
   fabricante: string;
 
-<<<<<<< HEAD
 }
 
 
-=======
-}
->>>>>>> origin/MariaGeral

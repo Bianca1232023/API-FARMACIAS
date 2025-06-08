@@ -8,13 +8,10 @@ export class DoacaoRemedio extends Model {
   @PrimaryKey
   @Column({type: DataType.INTEGER, autoIncrement: true, primaryKey: true})  
   doacaoRemedioId: number;
-<<<<<<< HEAD
 
   @ForeignKey(() => Solicitacao)
   @Column(DataType.INTEGER)
   solicitacaoId: number;
-=======
->>>>>>> origin/MariaGeral
 
   @ForeignKey(() => Usuario)
   @Column(DataType.INTEGER)

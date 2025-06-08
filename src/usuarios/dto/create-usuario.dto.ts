@@ -6,19 +6,17 @@ export class CreateUsuarioDto {
   @IsString()
   nome: string;
 
-<<<<<<< HEAD
-  @ApiProperty({ required: false })
-  dataNascimento?: Date;
-=======
-  @ApiProperty({ example: '12345678900' })
+  @ApiProperty({ example: '123.456.789-00' })
   @IsString()
   cpf: string;
->>>>>>> origin/MariaGeral
+
+  @ApiProperty({ required: false })
+  dataNascimento?: Date;
 
   @ApiProperty({ required: false})
   @IsOptional()
   @IsDateString()
-  dataNascimento?: Date; 
+  
 
   @ApiProperty({ example: 'joao@email.com' })
   @IsEmail()
