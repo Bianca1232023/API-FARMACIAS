@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateEstoqueDto } from './dto/create-estoque.dto';
 import { UpdateEstoqueDto } from './dto/update-estoque.dto';
@@ -43,5 +43,28 @@ export class EstoqueService {
 
   async findByRemedio(remedioId: number) {
     return await this.estoqueModel.findAll({ where: { remedioId } });
+  }
+
+  /*
+   Regra de negócio: Uma farmácia só pode doar medicamentos que estejam em estoque.
+   Regra de negócio: O medicamento doado deve ter quantidade suficiente em estoque para atender à solicitação.
+   Regra de negócio: Após cada doação, o sistema deve atualizar automaticamente o estoque da farmácia.
+   */
+  async doarMedicamentoEstoque(farmaciaId: number, remedioId: number, quantidade: number) {
+    const estoque = await this.estoqueModel.findOne({
+      where: { farmaciaId, remedioId },
+    });
+    if (!estoque) {
+      throw new BadRequestException('Não há estoque para esse medicamento na farmácia informada.');
+    }
+    if (estoque.quantidade_disponivel < quantidade) {
+      throw new BadRequestException('Quantidade insuficiente em estoque para a doação.');
+    }
+    estoque.quantidade_disponivel -= quantidade;
+    await estoque.save();
+    return {
+      message: 'Doação realizada com sucesso e estoque atualizado.',
+      estoque,
+    };
   }
 }

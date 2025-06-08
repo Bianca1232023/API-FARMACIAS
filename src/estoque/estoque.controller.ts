@@ -8,11 +8,12 @@ import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiResponse, ApiTa
 @ApiTags('estoque')
 @Controller('estoque')
 export class EstoqueController {
+  estoqueService: any;
   constructor(private readonly service: EstoqueService) {}
 
   @Post()
-  @ApiOperation({ summary: 'criar um novo item de estoque' })
-  @ApiResponse({ status: 201, description: 'estoque criado com sucesso.', type: Estoque })
+  @ApiOperation({ summary: 'Criar um novo item de estoque' })
+  @ApiResponse({ status: 201, description: 'Estoque criado com sucesso.', type: Estoque })
   @ApiResponse({ status: 400, description: 'Dados inválidos.' })
   @ApiBody({ type: CreateEstoqueDto })
   create(@Body() createDto: CreateEstoqueDto) {
@@ -20,7 +21,7 @@ export class EstoqueController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'retorna todos os estoques' })
+  @ApiOperation({ summary: 'Retorna todos os estoques' })
   @ApiResponse({ status: 200, description: 'Lista de estoque retornada com sucesso.', type: [Estoque] })
   @ApiResponse({ status: 400, description: 'Dados inválidos.' })
   findAll() {
@@ -28,7 +29,7 @@ export class EstoqueController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'retorna estoque por id' })
+  @ApiOperation({ summary: 'Retorna estoque por id' })
   @ApiResponse({ status: 200, description: 'Estoque encontrado.', type: Estoque })
   @ApiResponse({ status: 400, description: 'Dados inválidos.' })
   @ApiParam({ name: 'id', type: Number })
@@ -37,7 +38,7 @@ export class EstoqueController {
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'atualiza item de estoque por completo PUT' })
+  @ApiOperation({ summary: 'Atualiza item de estoque por completo PUT' })
   @ApiResponse({ status: 200, description: 'Estoque atualizado com sucesso.', type: Estoque })
   @ApiResponse({ status: 400, description: 'Dados inválidos.' })
   @ApiParam({ name: 'id', type: Number })
@@ -57,8 +58,8 @@ export class EstoqueController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'remove um estoque' })
-  @ApiResponse({ status: 204, description: 'estoque removido com sucesso.' })
+  @ApiOperation({ summary: 'Remove um estoque' })
+  @ApiResponse({ status: 204, description: 'Estoque removido com sucesso.' })
   @ApiResponse({ status: 400, description: 'Dados inválidos.' })
   @ApiParam({ name: 'id', type: Number })
   remove(@Param('id') id: string) {
@@ -67,7 +68,7 @@ export class EstoqueController {
 
   @Get('/farmacia/:farmaciaId')
   @ApiOperation({ summary: 'Retorna estoque por farmácia' })
-  @ApiResponse({ status: 200, description: 'estoque da farmácia encontrados.', type: [Estoque] })
+  @ApiResponse({ status: 200, description: 'Estoque da farmácia encontrados.', type: [Estoque] })
   @ApiResponse({ status: 400, description: 'Dados inválidos.' })
   @ApiParam({ name: 'farmaciaId', type: Number })
   findByFarmacia(@Param('farmaciaId') farmaciaId: string) {
@@ -76,11 +77,30 @@ export class EstoqueController {
 
   @Get('/remedio/:remedioId')
   @ApiOperation({ summary: 'Retorna estoque por remedio' })
-  @ApiResponse({ status: 200, description: 'estoque de remedios encontrados.', type: [Estoque] })
+  @ApiResponse({ status: 200, description: 'Estoque de remedios encontrados.', type: [Estoque] })
   @ApiResponse({ status: 400, description: 'Dados inválidos.' })
   @ApiParam({ name: 'remedioId', type: Number })
   findByRemedio(@Param('remedioId') remedioId: string) {
     return this.service.findByRemedio(+remedioId);
   }
-}
 
+  @Post('doar/:farmaciaId/:remedioId')
+  @ApiOperation({ summary: 'Atualiza o estoque após a doação de um medicamento para uma farmácia' })
+  @ApiResponse({ status: 200, description: 'Estoque atualizado com sucesso após a doação.', type: Estoque })
+  @ApiResponse({ status: 400, description: 'Dados inválidos.' })
+  @ApiParam({ name: 'farmaciaId', type: Number })
+  @ApiParam({ name: 'remedioId', type: Number })
+  @ApiBody({ schema: { properties: { quantidade: { type: 'number' } } } })
+  async doarMedicamento(
+  @Param('farmaciaId') farmaciaId: string,
+  @Param('remedioId') remedioId: string, 
+  @Body('quantidade') quantidade: number,
+  ) {
+    return this.service.doarMedicamentoEstoque(
+      Number(farmaciaId),
+      Number(remedioId),
+      quantidade,
+    );
+  }
+
+}
