@@ -6,7 +6,7 @@ import { UpdateDoacaoRemedioDto } from './dto/update-doacao-remedio.dto';
 
 @Injectable()
 export class DoacaoRemedioService {
-  constructor(
+constructor(
     @InjectModel(DoacaoRemedio)
     private readonly doacaoRemedioModel: typeof DoacaoRemedio,
   ) {}

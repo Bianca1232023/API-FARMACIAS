@@ -7,36 +7,36 @@ import { Farmacia } from 'src/farmacias/farmacias.model';
 
 @Table({ tableName: 'solicitacoes', timestamps: false }) 
 export class Solicitacao extends Model<Solicitacao> {
-    @PrimaryKey
-    @Column({type: DataType.INTEGER, autoIncrement: true, primaryKey: true})  
-    solicitacaoId: number;
+  @PrimaryKey
+  @Column({type: DataType.INTEGER, autoIncrement: true, primaryKey: true})  
+  declare solicitacaoId: number;
   
   @Column({ type: DataType.INTEGER })
-  usuarioId: number;
+  declare usuarioId: number;
 
   @ForeignKey(() => Remedio)
   @Column
-  remedioId: number;
+  declare remedioId: number;
 
-   @ForeignKey(() => Farmacia)
+  @ForeignKey(() => Farmacia)
   @Column({ type: DataType.INTEGER })
-  farmaciaid: number;
+  declare farmaciaId: number;
 
 
   @Column({ type: DataType.STRING })
-  justificativa: string;
+  declare justificativa: string;
 
   @Column({ type: DataType.STRING, defaultValue: 'pendente' }) // status: pendente | aprovada | recusada
-  status: string;
+  declare status: string;
   
   @HasOne(() => Receita)
-  receita: Receita;
+  declare receita: Receita;
 
   @ForeignKey(() => Receita)
   @Column({ type: DataType.INTEGER, allowNull: true })
-  receitaId: number;
+  declare receitaId: number;
 
   @Column({ type: DataType.DATE, defaultValue: DataType.NOW })
-  dataCriacao: Date;
+  declare dataCriacao: Date;
 
 }

@@ -7,32 +7,32 @@ import { Solicitacao } from 'src/solicitacoes/solicitacao.model';
 export class DoacaoRemedio extends Model {
   @PrimaryKey
   @Column({type: DataType.INTEGER, autoIncrement: true, primaryKey: true})  
-  doacaoRemedioId: number;
+  declare doacaoRemedioId: number;
 
   @ForeignKey(() => Solicitacao)
   @Column(DataType.INTEGER)
-  solicitacaoId: number;
+  declare solicitacaoId: number;
 
   @ForeignKey(() => Usuario)
   @Column(DataType.INTEGER)
-  usuarioId: number;
+  declare usuarioId: number;
 
   @ForeignKey(() => Remedio)
   @Column(DataType.INTEGER)
-  remedioId: number;
+  declare remedioId: number;
 
   @Column({ type: DataType.INTEGER, allowNull: false })
-  quantidade: number;
+  declare quantidade: number;
 
   @Column({ type: DataType.DATEONLY, defaultValue: DataType.NOW })
-  data_doacao: Date;
+  declare data_doacao: Date;
 
   @Column({ type: DataType.DATEONLY, allowNull: false })
-  data_fim_tratamento: Date;
+  declare data_fim_tratamento: Date;
 
   @BelongsTo(() => Usuario)
-  usuario: Usuario;
+  declare usuario: Usuario;
 
   @BelongsTo(() => Remedio)
-  remedio: Remedio;
+  declare remedio: Remedio;
 }
