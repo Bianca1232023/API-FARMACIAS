@@ -12,46 +12,46 @@ export class RemediosService {
     private remedioModel: typeof Remedio,
   ) {}
 
-  create(dto: CreateRemedioDto) {
-    return this.remedioModel.create({ ...dto });
+  async create(dto: CreateRemedioDto) {
+    return await this.remedioModel.create({ ...dto });
   }
 
-  findAll() {
-    return this.remedioModel.findAll();
+  async findAll() {
+    return await this.remedioModel.findAll();
   }
 
-  findOne(id: number) {
-    return this.remedioModel.findByPk(id);
+  async findOne(id: number) {
+    return await this.remedioModel.findByPk(id);
   }
 
-  findByPrincipio_Ativo(principio_ativo: string) {
-    return this.remedioModel.findAll({ where: { principio_ativo } });
+  async findByPrincipio_Ativo(principio_ativo: string) {
+    return await this.remedioModel.findAll({ where: { principio_ativo } });
   }
 
-  findByCategoria(categoria: string) {
-    return this.remedioModel.findAll({ where: { categoria } });
+  async findByCategoria(categoria: string) {
+    return await this.remedioModel.findAll({ where: { categoria } });
   }
 
   async listAllCategorias() {
-    const remedios = await this.findAll();
+    const remedios = await this.remedioModel.findAll();
     const categorias = remedios.map(r => r.categoria);
     return Array.from(new Set(categorias));
+  }//consertar
+
+  async findByNome(nome: string) {
+    return await this.remedioModel.findAll({ where: { nome } });
   }
 
-  findByNome(nome: string) {
-    return this.remedioModel.findAll({ where: { nome } });
+  async findByDosagem(dosagem: string){
+    return await this.remedioModel.findAll({where: {dosagem}});
   }
 
-  findByDosagem(dosagem: number){
-    return this.remedioModel.findAll({where: {dosagem}});
+  async findByFabricante(fabricante: string){
+    return await this.remedioModel.findAll({where: {fabricante}})
   }
 
-  findByFabricante(fabricante: string){
-    return this.remedioModel.findAll({where: {fabricante}})
-  }
-
-  update(id: number, dto: UpdateRemedioDto) {
-    return this.remedioModel.update(dto, { where: { id } });
+  async update(id: number, dto: UpdateRemedioDto) {
+    return await this.remedioModel.update(dto, { where: { remedioId: id } });
   }
 
   async updateCategoria(id: number, categoria: string) {
@@ -61,7 +61,7 @@ export class RemediosService {
     remedio.categoria = categoria;
     await remedio.save();
     return remedio;
-  }
+  }//consertar
 
   async updateAll(id: number, dto: UpdateRemedioDto) {
     const remedio = await this.findOne(id);
@@ -100,5 +100,21 @@ export class RemediosService {
   return remedio;
 }
 
+  async updatePrincipioAtivo(id: string, principio_ativo: string) {
+    const [updatedCount] = await this.remedioModel.update(
+      { principio_ativo },
+      { where: { id } }
+    );
+
+    if (updatedCount === 0) {
+      throw new NotFoundException('Remédio não encontrado ou princípio ativo igual ao atual.');
+    }
+
+    return { message: 'Princípio ativo atualizado com sucesso' };
+  }
 
 }
+
+
+
+
