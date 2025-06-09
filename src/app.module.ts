@@ -20,9 +20,9 @@ import { ReceitaModule } from './receita/receita-module';
 @Module({
 
   imports: [
-    SequelizeModule.forRoot({
+    SequelizeModule.forRoot({// Configuração do Sequelize para conexão com o banco de dados
       dialect: 'postgres',
-      //host: 'bsi.cefet-rj.br',
+      //host: 'bsi.cefet-rj.br',//foi alterada para banco local pois o servidor do cefet caiu, impedindo a continuação do projeto
       host: 'localhost',
       //port: 15432,
       port: 5432,

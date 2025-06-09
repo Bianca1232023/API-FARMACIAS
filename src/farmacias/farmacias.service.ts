@@ -25,23 +25,35 @@ export class FarmaciasService {
     return await this.farmaciaModel.findByPk(id);
   }
 
-  async findByBairro(bairro: string): Promise<Farmacia[]> {
-    return await this.farmaciaModel.findAll({
+async findByBairro(bairro: string): Promise<Farmacia[]> {
+    const farmacias = await this.farmaciaModel.findAll({
       where: where(
         fn('LOWER', col('bairro')),
         bairro.toLowerCase()
       )
     });
-  }
 
-  async findByCidade(cidade: string): Promise<Farmacia[]> {
-    return await this.farmaciaModel.findAll({
+    if (!farmacias || farmacias.length === 0) {
+      throw new NotFoundException(`Nenhuma farmácia encontrada para o bairro: ${bairro}`);
+    }
+
+    return farmacias;
+}
+
+async findByCidade(cidade: string): Promise<Farmacia[]> {
+    const farmacias = await this.farmaciaModel.findAll({
       where: where(
         fn('LOWER', col('cidade')),
         cidade.toLowerCase()
       )
     });
-  }
+    
+    if (!farmacias || farmacias.length === 0) {
+      throw new NotFoundException(`Nenhuma farmácia encontrada para a cidade: ${cidade}`);
+    }
+
+    return farmacias;
+}
 
  async update(id: number, updateDto: UpdateFarmaciaDto): Promise<Farmacia> {
     const farmacia = await this.findOne(id) as Farmacia;

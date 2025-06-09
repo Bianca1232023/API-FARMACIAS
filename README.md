@@ -1,3 +1,8 @@
+
+
+
+
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
@@ -20,6 +25,28 @@
 </p>
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Descrição do Desenvolvimento 
+
+RECURSOS UTILIZADOS:
+
+Sequelize, Nest, Swagger, Fetch
+
+REGRAS DE NEGÓCIO 
+
+Uma solicitação não pode ser aprovada se a receita não for válida ou o remédio solicitado não estiver disponível 
+Uma receita não pode ser cadastrada com a data de criação anterior a 3 meses do solicitado
+Uma solicitação não pode ser criada sem ter uma receita vinculada
+Se o estoque de algum remédio for igual ou inferior a 3, o sistema deve gerar um aviso
+Quando a quantidade de um remédio for zerada no estoque, ele deve ser excluído do estoque
+Uma farmacia não pode ser cadastrada sem seus dados completos
+CPF deve ser único evitando duplicidade, e CPF e email são obrigatórios para cadastro completo
+Não permitir remover CPF nem email ao atualizar 
+Regra de negócio: Uma farmácia só pode doar medicamentos que estejam em estoque
+Regra de negócio: O medicamento doado deve ter quantidade suficiente em estoque para atender à solicitação 
+Regra de negócio: Após cada doação, o sistema deve atualizar automaticamente o estoque da farmácia
+O remédio só pode ser atualizado se existir 
+Não é permitido atualizar o principio ativo se for igual ao valor atual 
+Alterações específicas não devem afetar os outros campos do remédio 
 
 ## Description
 
