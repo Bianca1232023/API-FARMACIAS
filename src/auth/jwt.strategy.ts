@@ -11,11 +11,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: true,
-      secretOrKey: configService.get<string>('JWT_SECRET'), // aqui usa a instância
+      secretOrKey: configService.get<string>('JWT_SECRET'), 
       passReqToCallback: true,
     });
   }
-
 
   async validate(req: Request, payload: any) {
     const authHeader = req.headers['authorization'];
@@ -36,7 +35,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         throw new UnauthorizedException('Token inválido ou não autorizado');
       }
 
-      // Apenas retorna o JSON da resposta (sem verificar propriedades)
       const data = await response.json();
       return data;
     } catch (error) {
