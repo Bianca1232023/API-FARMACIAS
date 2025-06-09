@@ -63,10 +63,6 @@ async update(id: number, updateDto: UpdateEstoqueDto): Promise<Estoque> {//regra
     return await this.estoqueModel.findAll({ where: { remedioId } });
   }
 
-  /*async verificarDisponibilidade(remedioId: number): Promise<boolean> {
-    const registros = await this.findByRemedio(remedioId);
-    return registros.length > 0;
-  }*/
 
    async verificarDisponibilidade(remedioId: number): Promise<boolean> {
     const remedio = await this.estoqueModel.findOne({

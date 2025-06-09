@@ -63,7 +63,7 @@ describe('EstoqueController', () => {
     const dto = { quantidade_disponivel: 8 };
 
     (service.update as jest.Mock).mockResolvedValue([1]);
-    const updated = await controller.update('1', dto);
+    const updated = await controller.update(1, dto);
     expect(updated).toEqual([1]);
   });
 
@@ -71,7 +71,7 @@ describe('EstoqueController', () => {
     const dto = { quantidade_disponivel: 15 };
 
     (service.patch as jest.Mock).mockResolvedValue([1]);
-    const patched = await controller.patch('1', dto);
+    const patched = await controller.patch(1, dto);
     expect(patched).toEqual([1]);
   });
 
