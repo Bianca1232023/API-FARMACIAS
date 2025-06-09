@@ -13,7 +13,7 @@ export class Usuario extends Model<Usuario> {
   dataNascimento: Date;
 
   @ApiProperty()
-  @Column(DataType.STRING)
+  @Column({type: DataType.STRING(12), allowNull: false, unique: true})
   cpf: string;
 
 
