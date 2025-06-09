@@ -5,33 +5,46 @@ import { UpdateReceitaDto } from './dto/update-receita.dto';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ParseIntPipe } from '@nestjs/common';
 
+@ApiTags('receitas')
 @Controller('receitas')
 export class ReceitaController {
-  ReceitaService: any;
   constructor(private readonly service: ReceitaService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Cria uma nova receita' })
+  @ApiResponse({ status: 201, description: 'Receita criada com sucesso.' })
   create(@Body() dto: CreateReceitaDto) {
     return this.service.create(dto);
   }
 
   @Get()
+  @ApiOperation({ summary: 'Lista todas as receitas' })
+  @ApiResponse({ status: 200, description: 'Lista de receitas retornada com sucesso.' })
   findAll() {
     return this.service.findAll();
   }
 
   @Get(':id')
-  findById(@Param('id') id: number) {
+  @ApiOperation({ summary: 'Busca uma receita pelo ID' })
+  @ApiResponse({ status: 200, description: 'Receita encontrada.' })
+  @ApiResponse({ status: 404, description: 'Receita não encontrada.' })
+  findById(@Param('id', ParseIntPipe) id: number) {
     return this.service.findById(id);
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() dto: UpdateReceitaDto) {
+  @ApiOperation({ summary: 'Atualiza uma receita existente' })
+  @ApiResponse({ status: 200, description: 'Receita atualizada com sucesso.' })
+  @ApiResponse({ status: 404, description: 'Receita não encontrada.' })
+  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateReceitaDto) {
     return this.service.update(id, dto);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: number) {
+  @ApiOperation({ summary: 'Remove uma receita pelo ID' })
+  @ApiResponse({ status: 200, description: 'Receita removida com sucesso.' })
+  @ApiResponse({ status: 404, description: 'Receita não encontrada.' })
+  delete(@Param('id', ParseIntPipe) id: number) {
     return this.service.delete(id);
   }
 
@@ -40,16 +53,6 @@ export class ReceitaController {
   @ApiResponse({ status: 200, description: 'Status de validade retornado com sucesso.' })
   @ApiResponse({ status: 404, description: 'Receita não encontrada.' })
   async verificarValidade(@Param('id', ParseIntPipe) id: number) {
-    return this.ReceitaService.verificarValidade(id);
-  }
-}
-
-@ApiTags('farmacias') // Categoria no Swagger
-@Controller('farmacias')
-export class FarmaciaController {
-  @Get()
-  @ApiOperation({ summary: 'Lista todas as farmácias' })
-  findAll() {
-    return [];
+    return this.service.verificarValidade(id);
   }
 }

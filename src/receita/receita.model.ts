@@ -9,7 +9,6 @@ export class Receita extends Model<Receita> {
     primaryKey: true,
   })
   
-
   @Column({
     type: DataType.STRING,
     allowNull: false,
