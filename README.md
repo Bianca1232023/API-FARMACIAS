@@ -27,7 +27,7 @@ O trabalho da API de farmácias digitais sociais consiste em um sistemas para fa
 <h3>Descrição do Desenvolvimento</h3>
 
 RECURSOS UTILIZADOS:
-Sequelize, Nest, Swagger e Fetch
+Sequelize, Nest, Swagger, Fetch e PostgreSQL
 
 REGRAS DE NEGÓCIOS:
 
