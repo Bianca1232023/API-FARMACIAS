@@ -1,5 +1,4 @@
-import { STRING } from 'sequelize';
-import { Table, Column, Model, DataType, PrimaryKey, AllowNull } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, PrimaryKey } from 'sequelize-typescript';
 import { Col } from 'sequelize/types/utils';
 
 @Table({ tableName: 'remedios', timestamps: false })
@@ -21,5 +20,8 @@ export class Remedio extends Model {
 
   @Column({ type: DataType.STRING(50) })
   fabricante: string;
+
+  @Column({ type: DataType.INTEGER }) //
+  quantidade: number;
 
 }

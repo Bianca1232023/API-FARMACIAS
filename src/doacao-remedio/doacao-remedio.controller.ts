@@ -1,11 +1,13 @@
-import { Controller, Get, Post, Body, Param, Delete, Put, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, Patch, UseGuards } from '@nestjs/common';
 import { DoacaoRemedioService } from './doacao-remedio.service';
 import { CreateDoacaoRemedioDto } from './dto/create-doacao-remedio.dto';
 import { UpdateDoacaoRemedioDto } from './dto/update-doacao-remedio.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('Doações-Remédios') 
 @Controller('doacoes-remedios')
+@UseGuards(JwtAuthGuard)
 export class DoacaoRemedioController {
   constructor(private readonly service: DoacaoRemedioService) {}
 

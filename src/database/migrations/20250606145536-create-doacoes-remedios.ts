@@ -2,32 +2,36 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('doacoes_remedios', {
-      id: {
+    await queryInterface.createTable('doacao_remedio', {
+      doacaoRemedioId: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false,
       },
+      solicitacaoId: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'solicitacoes',
+          key: 'solicitacaoId',
+        },
+      },
       usuarioId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
-          model: 'usuarios', 
-          key: 'id',
+          model: 'usuarios',
+          key: 'id', // ajuste caso o nome real da PK em `usuarios` seja diferente
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
       },
       remedioId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
-          model: 'remedios', 
-          key: 'id',
+          model: 'remedios',
+          key: 'remedioId',
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
       },
       quantidade: {
         type: Sequelize.INTEGER,
@@ -35,7 +39,6 @@ module.exports = {
       },
       data_doacao: {
         type: Sequelize.DATEONLY,
-        allowNull: true,
         defaultValue: Sequelize.NOW,
       },
       data_fim_tratamento: {
@@ -46,6 +49,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('doacoes_remedios');
+    await queryInterface.dropTable('doacao_remedio');
   },
 };

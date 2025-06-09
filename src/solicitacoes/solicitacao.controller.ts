@@ -1,9 +1,10 @@
-import {  Body,  Controller,  Delete,  Get,  Param,  Post,  Put,} from '@nestjs/common';
+import {  Body,  Controller,  Delete,  Get,  Param,  Post,  Put, UseGuards,} from '@nestjs/common';
 import { SolicitacoesService } from './solicitacao.service';
 import { CreateSolicitacaoDto } from './dto/create-solicitacao.dto';
 import { UpdateSolicitacaoDto } from './dto/update-solicitacao.dto';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Patch, ParseIntPipe } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 
 @ApiResponse({ status: 200, description: 'Solicitação aprovada com sucesso.' })
@@ -12,6 +13,7 @@ import { Patch, ParseIntPipe } from '@nestjs/common';
 
 
 @ApiTags('farmacias') 
+@UseGuards(JwtAuthGuard)
 @Controller('farmacias')
 export class FarmaciaController {
   @Get()

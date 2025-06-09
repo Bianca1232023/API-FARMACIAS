@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
-import { Controller, Get } from '@nestjs/common';
+import { ApiTags, ApiOperation} from '@nestjs/swagger';
+import { Controller, Get} from '@nestjs/common';
 
 
 describe('AppController', () => {
@@ -22,6 +22,7 @@ describe('AppController', () => {
       expect(appController.getHello()).toBe('Hello World!');
     });
   });
+
 }
 
 
@@ -37,3 +38,6 @@ export class FarmaciaController {
     return [];
   }
 }
+
+
+

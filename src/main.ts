@@ -20,9 +20,24 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document); // A rota de acesso será /api
 
   await app.listen(3001);
-}
 
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
+  const config = new DocumentBuilder()
+    .setTitle('API - Farmácias Sociais Digitais')
+    .setDescription('Documentação da API para o sistema de Farmácias Gigitais Sociais')
+    .setVersion('1.0')
+    .addBearerAuth() 
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document); // acessa em http://localhost:3000/api
+
+  await app.listen(3000);
+
+}
 bootstrap();
 
-
-
+}

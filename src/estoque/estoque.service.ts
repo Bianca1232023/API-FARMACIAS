@@ -63,10 +63,6 @@ async update(id: number, updateDto: UpdateEstoqueDto): Promise<Estoque> {//regra
     return await this.estoqueModel.findAll({ where: { remedioId } });
   }
 
-  /*async verificarDisponibilidade(remedioId: number): Promise<boolean> {
-    const registros = await this.findByRemedio(remedioId);
-    return registros.length > 0;
-  }*/
 
    async verificarDisponibilidade(remedioId: number): Promise<boolean> {
     const remedio = await this.estoqueModel.findOne({
@@ -84,4 +80,34 @@ async update(id: number, updateDto: UpdateEstoqueDto): Promise<Estoque> {//regra
 }
 
 
-}
+  /*
+   Regra de negócio: Uma farmácia só pode doar medicamentos que estejam em estoque.
+   Regra de negócio: O medicamento doado deve ter quantidade suficiente em estoque para atender à solicitação.
+   Regra de negócio: Após cada doação, o sistema deve atualizar automaticamente o estoque da farmácia.
+   */
+  async doarMedicamentoEstoque(farmaciaId: number, remedioId: number, quantidade: number) {
+    const estoque = await this.estoqueModel.findOne({
+      where: { farmaciaId, remedioId },
+    });
+    if (!estoque) {
+      throw new BadRequestException('Não há estoque para esse medicamento na farmácia informada.');
+    }
+    if (estoque.quantidade_disponivel < quantidade) {
+      throw new BadRequestException('Quantidade insuficiente em estoque para a doação.');
+    }
+    estoque.quantidade_disponivel -= quantidade;
+    await estoque.save();
+    return {
+      message: 'Doação realizada com sucesso e estoque atualizado.',
+      estoque,
+    };
+
+    
+
+
+  }
+
+   
+  }
+
+

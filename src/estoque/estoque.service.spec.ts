@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { EstoqueService } from './estoque.service';
 import { getModelToken } from '@nestjs/sequelize';
 import { Estoque } from './estoque.model';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 
 describe('EstoqueService', () => {
   let service: EstoqueService;
@@ -9,11 +10,15 @@ describe('EstoqueService', () => {
 
   beforeEach(async () => {
     mockEstoqueModel = {
-      create:   jest.fn(),
-      findAll:  jest.fn(),
+      create: jest.fn(),
+      findAll: jest.fn(),
       findByPk: jest.fn(),
-      update:   jest.fn(),
-      destroy:  jest.fn(),
+      findOne: jest.fn(),
+      destroy: jest.fn(),
+      update: jest.fn(),
+      findByFarmacia: jest.fn(),
+      findByRemedio: jest.fn(),
+      doarMedicamento: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -49,6 +54,11 @@ describe('EstoqueService', () => {
     expect(await service.findOne(1)).toEqual(data);
   });
 
+  it('retorna erro se estoque não encontrado', async () => {
+    mockEstoqueModel.findByPk.mockResolvedValue(null);
+    await expect(service.findOne(1)).rejects.toThrow(NotFoundException);
+  });
+
   it('atualiza estoque (PUT)', async () => {
     const dto = { quantidade_disponivel: 6 };
     mockEstoqueModel.update.mockResolvedValue([1]);
@@ -64,9 +74,10 @@ describe('EstoqueService', () => {
   });
 
   it('remove estoque', async () => {
-    mockEstoqueModel.destroy.mockResolvedValue(1);
-    expect(await service.remove(1)).toEqual(1);
-    expect(mockEstoqueModel.destroy).toHaveBeenCalledWith({ where: { id: 1 } });
+    const estoque = { destroy: jest.fn().mockResolvedValue(undefined) };
+    jest.spyOn(service, 'findOne').mockResolvedValue(estoque as any);
+    expect(await service.remove(1)).toEqual({ message: 'Estoque removido com sucesso' });
+    expect(estoque.destroy).toHaveBeenCalled();
   });
 
   it('filtra por farmacia', async () => {
@@ -81,5 +92,35 @@ describe('EstoqueService', () => {
     mockEstoqueModel.findAll.mockResolvedValue(data);
     expect(await service.findByRemedio(9)).toEqual(data);
     expect(mockEstoqueModel.findAll).toHaveBeenCalledWith({ where: { remedioId: 9 } });
+  });
+
+//Regra de negócio: Uma farmácia só pode doar medicamentos que estejam em estoque.
+  describe('doarMedicamento', () => {
+  it('retorna null se não houver estoque', async () => {
+    mockEstoqueModel.findOne.mockResolvedValue(null);
+    const result = await service.doarMedicamentoEstoque(1, 1, 5);
+    expect(result).toBeNull(); 
+  });
+
+//Regra de negócio: O medicamento doado deve ter quantidade suficiente em estoque para atender à solicitação.
+  it('retorna null se a quantidade for insuficiente', async () => {
+    const estoque = { quantidade_disponivel: 3 };
+    mockEstoqueModel.findOne.mockResolvedValue(estoque);
+    const result = await service.doarMedicamentoEstoque(1, 1, 5);
+    expect(result).toBeNull(); 
+  });
+
+//Regra de negócio: Após cada doação, o sistema deve atualizar automaticamente o estoque da farmácia.
+    it('realiza a doação e atualiza o estoque', async () => {
+      const estoque = {
+        quantidade_disponivel: 10,
+        save: jest.fn().mockResolvedValue(undefined),
+      };
+      mockEstoqueModel.findOne.mockResolvedValue(estoque);
+      const result = await service.doarMedicamentoEstoque(1, 1, 4);
+      expect(estoque.quantidade_disponivel).toBe(6);
+      expect(estoque.save).toHaveBeenCalled();
+      expect(result.message).toBe('Doação realizada com sucesso e estoque atualizado.');
+    });
   });
 });

@@ -1,15 +1,14 @@
 import { Module } from '@nestjs/common';
-import Sequelize from 'sequelize';
-import { SequelizeModule } from '@nestjs/sequelize';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UsuariosModule } from './usuarios/usuarios.module';
+import { SequelizeModule } from '@nestjs/sequelize';
+import { Usuario } from './usuarios/usuarios.model';
 import { Farmacia } from './farmacias/farmacias.model';
 import { DoacaoRemedio } from './doacao-remedio/doacao-remedio.model';
-import { DoacaoRemedioModule } from './doacao-remedio/doacao-remedio.module';
-import { FarmaciasModule } from './farmacias/farmacias.module';
-import { Usuario } from './usuarios/usuarios.model';
-import { UsuariosModule } from './usuarios/usuarios.module';
 import { Remedio } from './remedios/remedios.model';
+import { FarmaciasModule } from './farmacias/farmacias.module';
+import { DoacaoRemedioModule } from './doacao-remedio/doacao-remedio.module';
 import { RemediosModule } from './remedios/remedios.module';
 import { EstoqueModule } from './estoque/estoque.module';
 import { Estoque } from './estoque/estoque.model';
@@ -37,13 +36,9 @@ dotenv.config();
       autoLoadModels: true,
       synchronize: true,
     }),
-    FarmaciasModule, DoacaoRemedioModule, UsuariosModule, RemediosModule, EstoqueModule, SolicitacoesModule, ReceitaModule
+    UsuariosModule, EstoqueModule, FarmaciasModule, DoacaoRemedioModule, RemediosModule, ReceitaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-
 export class AppModule {}
-
-
-

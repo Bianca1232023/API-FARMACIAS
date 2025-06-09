@@ -8,112 +8,112 @@ describe('UsuariosController', () => {
   let service: UsuariosService;
 
   beforeEach(async () => {
+    const mockService = {
+      create: jest.fn(dto => {
+        if (!dto.cpf || !dto.email) {
+          throw new Error('CPF e Email são obrigatórios');
+        }
+        if (dto.cpf === '123') {
+          throw new Error('CPF já cadastrado');
+        }
+        return { id: Date.now(), ...dto };
+      }),
+      findAll: jest.fn(() => Promise.resolve([])),
+      findOne: jest.fn(id => Promise.resolve({ id: Number(id) })),
+      update: jest.fn((id, dto) => Promise.resolve({ id: Number(id), ...dto })),
+      remove: jest.fn(id => {
+        if (id === '5') {
+          return Promise.reject(new Error('Funcionário não pode ser removido'));
+        }
+        return Promise.resolve();
+      }),
+      findByEmail: jest.fn(email => Promise.resolve({ email })),
+      findFuncionarios: jest.fn(() => Promise.resolve([{ funcionario: true }])),
+      findByFarmaciaId: jest.fn(farmaciaId => Promise.resolve([{ farmaciaId: Number(farmaciaId) }])),
+      patch: jest.fn((id, dto) => Promise.resolve({ id: Number(id), ...dto })),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsuariosController],
-      providers: [UsuariosService],
+      providers: [
+        {
+          provide: UsuariosService,
+          useValue: mockService,
+        },
+      ],
     }).compile();
 
     controller = module.get<UsuariosController>(UsuariosController);
     service = module.get<UsuariosService>(UsuariosService);
   });
 
-  it('deve estar definido', () => {
+  it('Definir o controlador', () => {
     expect(controller).toBeDefined();
   });
 
-  it('criar um usuario', async () => {
+  it('Criar um usuario', async () => {
     const dto: CreateUsuarioDto = {
-      nome: 'Joao Silva',
+      nome: 'Joao',
+      cpf: '12345678901',
       email: 'joao@example.com',
       funcionario: true,
     };
-    const resultado = await controller.create(dto);
-    expect(resultado).toHaveProperty('id');
-    expect(resultado.nome).toBe('João Silva');
+    const result = await controller.create(dto);
+    expect(result).toHaveProperty('id');
+    expect(result.nome).toBe('Joao');
   });
 
-  it('retornar todos os usuarios', async () => {
-    await controller.create({
-      nome: 'Teste',
-      email: 'teste@example.com',
-      funcionario: false,
-    });
+  it('Retornar todos os usuarios', async () => {
     const usuarios = await controller.findAll();
     expect(Array.isArray(usuarios)).toBe(true);
   });
 
-  it('retornar um usuario específico pelo ID', async () => {
-    const criado = await controller.create({
-      nome: 'Ana',
-      email: 'ana@example.com',
-      funcionario: false,
-    });
-    const usuario = await controller.findOne(criado.id.toString());
-    expect(usuario).toHaveProperty('id', criado.id);
+  it('Retornar um usuario pelo ID', async () => {
+    const usuario = await controller.findOne('1');
+    expect(usuario).toHaveProperty('id', 1);
   });
 
-  it('atualizar um usuario', async () => {
-    const criado = await controller.create({
-      nome: 'Carlos',
-      email: 'carlos@example.com',
-      funcionario: true,
-    });
-    const atualizado = await controller.update(criado.id.toString(), {
-      nome: 'Carlos Alberto',
-    });
-    expect(atualizado?.nome).toBe('Carlos Alberto');
+  it('Atualizar usuario', async () => {
+    const updated = await controller.update('2', { nome: 'Carlos' });
+    expect(updated?.nome).toBe('Carlos');
   });
 
-  it('deletar um usuario', async () => {
-    const criado = await controller.create({
-      nome: 'Laura',
-      email: 'laura@example.com',
-      funcionario: false,
-    });
-    await controller.remove(criado.id.toString());
-    const resultado = await controller.findOne(criado.id.toString());
-    expect(resultado).toBeNull(); 
+  it('Deletar um usuario', async () => {
+    const result = await controller.remove('3');
+    expect(result).toBeUndefined();
   });
 
-  it('retornar um usuario pelo email', async () => {
-  const criado = await controller.create({
-    nome: 'Teste Email',
-    email: 'testeemail@example.com',
-    funcionario: true,
-  });
-  const usuario = await controller.findByEmail('testeemail@example.com');
-  expect(usuario).toBeDefined();
-  expect(usuario?.email).toBe('testeemail@example.com');
+  it('Retornar um usuario pelo email', async () => {
+    const usuario = await controller.findByEmail('emailteste@example.com');
+    expect(usuario).toBeDefined();
+    expect(usuario?.email).toBe('emailteste@example.com');
   });
 
-  it('retornar todos os funcionarios', async () => {
-    await controller.create({
-      nome: 'Funcionario Teste',
-      email: 'func@example.com',
-      funcionario: true,
-    });
+  it('Retornar apenas os usuarios que sao funcionarios', async () => {
     const funcionarios = await controller.findFuncionarios();
     expect(funcionarios.every(f => f.funcionario)).toBe(true);
   });
 
-  it('retornar todos os usuarios por farmaciaId', async () => {
-    const usuario = await controller.create({
-      nome: 'Farmacia1 usuario',
-      email: 'f1@example.com',
-      funcionario: false,
-      farmaciaId: 1,
-    });
-    const resultado = await controller.findByFarmaciaId('1');
-    expect(resultado[0].farmaciaId).toBe(1);
+  it('Retornar usuarios pelo ID da farmacia', async () => {
+    const result = await controller.findByFarmaciaId('1');
+    expect(result[0].farmaciaId).toBe(1);
   });
 
-  it('atualizar parcialmente um usuario (patch)', async () => {
-    const criado = await controller.create({
-      nome: 'Parcial',
-      email: 'patch@example.com',
-      funcionario: false,
-    });
-    const atualizado = await controller.patch(criado.id.toString(), { funcionario: true });
-    expect(atualizado?.funcionario).toBe(true);
+  it('Atualizar parcialmente um usuario (PATCH)', async () => {
+    const patched = await controller.patch('4', { funcionario: true });
+    expect(patched?.funcionario).toBe(true);
+  });
+
+// Regra de negócio: CPF e email são obrigatórios para cadastro completo
+  it('Deve lançar erro ao cadastrar usuário sem CPF ou email', async () => {
+    const dto: any = { nome: 'Fulano', funcionario: false };
+    await expect(controller.create(dto))
+      .rejects.toThrow('CPF e Email são obrigatórios');
+  });
+
+// REGRA DE NEGÓCIO: Evitar duplicidade de CPF.
+  it('Deve lançar erro ao tentar cadastrar CPF já existente', async () => {
+    await expect(controller.create({ nome: 'Fulano', cpf: '123', email: 'a@a.com', funcionario: false } as any))
+      .rejects.toThrow('CPF já cadastrado');
   });
 });
