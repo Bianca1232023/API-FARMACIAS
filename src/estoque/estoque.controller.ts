@@ -3,13 +3,13 @@ import { EstoqueService } from './estoque.service';
 import { CreateEstoqueDto } from './dto/create-estoque.dto';
 import { UpdateEstoqueDto } from './dto/update-estoque.dto';
 import { Estoque } from './estoque.model';
-import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ExternalApiAuthGuard } from 'src/auth/external-api.guard';
 
 
 @ApiTags('estoque')
 @Controller('estoque')
-@UseGuards(JwtAuthGuard)
+
 export class EstoqueController {
   estoqueService: any;
   constructor(private readonly service: EstoqueService) {}
@@ -22,6 +22,8 @@ export class EstoqueController {
     return this.service.findLowStock();
   }
 
+  @UseGuards(ExternalApiAuthGuard)
+  @ApiBearerAuth()
   @Post()
   @ApiOperation({ summary: 'Criar um novo item de estoque' })
   @ApiResponse({ status: 201, description: 'Estoque criado com sucesso.', type: Estoque })
@@ -48,45 +50,34 @@ export class EstoqueController {
     return this.service.findOne(+id);
   }
 
+  @UseGuards(ExternalApiAuthGuard)
+  @ApiBearerAuth()
 @Put(':id')
 @ApiOperation({ summary: 'Atualiza item de estoque por completo PUT' })
 @ApiResponse({ status: 200, description: 'Estoque atualizado com sucesso.', type: Estoque })
 @ApiResponse({ status: 400, description: 'Dados inválidos.' })
 @ApiResponse({ status: 404, description: 'Estoque não encontrado ou removido pois a quantidade zerou.' })
 @ApiParam({ name: 'id', type: Number })
+@ApiBody({ type: UpdateEstoqueDto })
+async update(@Param('id', ParseIntPipe) id: number, @Body() updateDto: UpdateEstoqueDto) {
+  return await this.service.update(id, updateDto);
+}
 
-
-  @Put(':id')
-  @ApiOperation({ summary: 'Atualiza item de estoque por completo PUT' })
-  @ApiResponse({ status: 200, description: 'Estoque atualizado com sucesso.', type: Estoque })
-  @ApiResponse({ status: 400, description: 'Dados inválidos.' })
-  @ApiResponse({ status: 404, description: 'Estoque não encontrado ou removido pois a quantidade zerou.' })
-  @ApiParam({ name: 'id', type: Number })
-  @ApiBody({ type: UpdateEstoqueDto })
-  async update(@Param('id', ParseIntPipe) id: number, @Body() updateDto: UpdateEstoqueDto) {
-    return await this.service.update(id, updateDto);
-  }
-
-  @Patch(':id')
-  @ApiOperation({ summary: 'Atualiza parcialmente um estoque com patch' })
-  @ApiResponse({ status: 200, description: 'Estoque atualizado parcialmente com sucesso.', type: Estoque })
-  @ApiResponse({ status: 400, description: 'Dados inválidos.' })
-  @ApiResponse({ status: 404, description: 'Estoque não encontrado ou removido pois a quantidade zerou.' })
-  @ApiParam({ name: 'id', type: Number })
-  @ApiBody({ type: UpdateEstoqueDto })
-  async patch(@Param('id', ParseIntPipe) id: number, @Body() dto: Partial<UpdateEstoqueDto>) {
-    return await this.service.patch(id, dto);
-  }
-
-
+  @UseGuards(ExternalApiAuthGuard)
+  @ApiBearerAuth()
 @Patch(':id')
 @ApiOperation({ summary: 'Atualiza parcialmente um estoque com patch' })
 @ApiResponse({ status: 200, description: 'Estoque atualizado parcialmente com sucesso.', type: Estoque })
 @ApiResponse({ status: 400, description: 'Dados inválidos.' })
 @ApiResponse({ status: 404, description: 'Estoque não encontrado ou removido pois a quantidade zerou.' })
 @ApiParam({ name: 'id', type: Number })
-
-    
+@ApiBody({ type: UpdateEstoqueDto })
+async patch(@Param('id', ParseIntPipe) id: number, @Body() dto: Partial<UpdateEstoqueDto>) {
+  return await this.service.patch(id, dto);
+}
+   
+  @UseGuards(ExternalApiAuthGuard)
+  @ApiBearerAuth()
   @Delete(':id')
   @ApiOperation({ summary: 'Remove um estoque' })
   @ApiResponse({ status: 204, description: 'Estoque removido com sucesso.' })

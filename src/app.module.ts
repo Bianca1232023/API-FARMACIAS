@@ -36,7 +36,7 @@ dotenv.config();
       autoLoadModels: true,
       synchronize: true,
     }),
-    UsuariosModule, EstoqueModule, FarmaciasModule, DoacaoRemedioModule, RemediosModule, ReceitaModule, Solicitacao
+    UsuariosModule, EstoqueModule, FarmaciasModule, DoacaoRemedioModule, RemediosModule, ReceitaModule, SolicitacoesModule
   ],
   controllers: [AppController],
   providers: [AppService],

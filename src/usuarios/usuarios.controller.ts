@@ -3,16 +3,18 @@ import { UsuariosService } from './usuarios.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { Usuario } from './usuarios.model';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ExternalApiAuthGuard } from 'src/auth/external-api.guard';
 
 
 @ApiTags('usuarios')
-@UseGuards(JwtAuthGuard)
+
 @Controller('usuarios')
 export class UsuariosController {
   constructor(private readonly usuariosService: UsuariosService) {}
 
+  @UseGuards(ExternalApiAuthGuard)
+  @ApiBearerAuth()
   @Post()
   @ApiOperation({ summary: 'Cria um novo usuário' })
   @ApiResponse({ status: 201, description: 'Usuário criado com sucesso.', type: Usuario })
@@ -65,6 +67,8 @@ export class UsuariosController {
     return this.usuariosService.findByFarmaciaId(+id);
   }
 
+  @UseGuards(ExternalApiAuthGuard)
+  @ApiBearerAuth()
   @Put(':id')
   @ApiOperation({ summary: 'Atualiza um usuário por completo' })
   @ApiResponse({ status: 200, description: 'Usuário atualizado com sucesso.', type: Usuario })
@@ -75,6 +79,8 @@ export class UsuariosController {
     return this.usuariosService.update(+id, updateUsuarioDto);
   }
 
+  @UseGuards(ExternalApiAuthGuard)
+  @ApiBearerAuth()
   @Patch(':id')
   @ApiOperation({ summary: 'Atualiza parcialmente um usuário' })
   @ApiResponse({ status: 200, description: 'Usuário atualizado parcialmente com sucesso.', type: Usuario })
@@ -85,6 +91,8 @@ export class UsuariosController {
     return this.usuariosService.patch(+id, data);
   }
 
+  @UseGuards(ExternalApiAuthGuard)
+  @ApiBearerAuth()
   @Delete(':id')
   @ApiOperation({ summary: 'Remove um usuário' })
   @ApiResponse({ status: 204, description: 'Usuário removido com sucesso.' })

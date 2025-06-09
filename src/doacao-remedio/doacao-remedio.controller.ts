@@ -2,15 +2,17 @@ import { Controller, Get, Post, Body, Param, Delete, Put, Patch, UseGuards } fro
 import { DoacaoRemedioService } from './doacao-remedio.service';
 import { CreateDoacaoRemedioDto } from './dto/create-doacao-remedio.dto';
 import { UpdateDoacaoRemedioDto } from './dto/update-doacao-remedio.dto';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
+import { ExternalApiAuthGuard } from 'src/auth/external-api.guard';
 
 @ApiTags('Doações-Remédios') 
 @Controller('doacoes-remedios')
-@UseGuards(JwtAuthGuard)
+
 export class DoacaoRemedioController {
   constructor(private readonly service: DoacaoRemedioService) {}
 
+  @UseGuards(ExternalApiAuthGuard)
+  @ApiBearerAuth()
   @Post()
   @ApiOperation({ summary: 'Criar uma nova doação de remédio' })
   @ApiBody({ type: CreateDoacaoRemedioDto })
@@ -46,6 +48,9 @@ export class DoacaoRemedioController {
     return this.service.findByUsuarioId(+usuarioId);
   }
 
+
+  @UseGuards(ExternalApiAuthGuard)
+  @ApiBearerAuth()
   @Put(':id')
   @ApiOperation({ summary: 'Atualizar doação de remédio por ID' })
   @ApiParam({ name: 'id', type: Number })
@@ -56,6 +61,8 @@ export class DoacaoRemedioController {
     return this.service.update(+id, dto);
   }
 
+    @UseGuards(ExternalApiAuthGuard)
+  @ApiBearerAuth()
     @Patch(':id')
     @ApiOperation({ summary: 'Atualizar doação' })
     @ApiParam({ name: 'id', description: 'ID da doação' })
@@ -66,6 +73,8 @@ export class DoacaoRemedioController {
     }
   
 
+     @UseGuards(ExternalApiAuthGuard)
+  @ApiBearerAuth() 
   @Delete(':id')
   @ApiOperation({ summary: 'Remover doação por ID' })
   @ApiParam({ name: 'id', type: Number })

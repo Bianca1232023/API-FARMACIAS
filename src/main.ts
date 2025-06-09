@@ -14,10 +14,18 @@ async function bootstrap() {
     .setTitle('API Farmácia Social')
     .setDescription('Documentação da API do sistema de farmácia social')
     .setVersion('1.0')
+    .addBearerAuth(
+    {
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+    },
+    'jwt', 
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document); // A rota de acesso será /api
+  SwaggerModule.setup('api', app, document); 
 
   await app.listen(3001);
 
