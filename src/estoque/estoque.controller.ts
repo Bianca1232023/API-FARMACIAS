@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Param, Put, Patch, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Patch, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { EstoqueService } from './estoque.service';
 import { CreateEstoqueDto } from './dto/create-estoque.dto';
 import { UpdateEstoqueDto } from './dto/update-estoque.dto';
 import { Estoque } from './estoque.model';
-import { ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ExternalApiAuthGuard } from 'src/auth/external-api.guard';
 
 
 @ApiTags('estoque')
@@ -19,6 +20,8 @@ export class EstoqueController {
     return this.service.findLowStock();
   }
 
+  @UseGuards(ExternalApiAuthGuard)
+  @ApiBearerAuth()
   @Post()
   @ApiOperation({ summary: 'criar um novo item de estoque' })
   @ApiResponse({ status: 201, description: 'estoque criado com sucesso.', type: Estoque })
@@ -45,6 +48,8 @@ export class EstoqueController {
     return this.service.findOne(+id);
   }
 
+  @UseGuards(ExternalApiAuthGuard)
+  @ApiBearerAuth()
 @Put(':id')
 @ApiOperation({ summary: 'Atualiza item de estoque por completo PUT' })
 @ApiResponse({ status: 200, description: 'Estoque atualizado com sucesso.', type: Estoque })
@@ -56,6 +61,8 @@ async update(@Param('id', ParseIntPipe) id: number, @Body() updateDto: UpdateEst
   return await this.service.update(id, updateDto);
 }
 
+  @UseGuards(ExternalApiAuthGuard)
+  @ApiBearerAuth()
 @Patch(':id')
 @ApiOperation({ summary: 'Atualiza parcialmente um estoque com patch' })
 @ApiResponse({ status: 200, description: 'Estoque atualizado parcialmente com sucesso.', type: Estoque })
@@ -66,7 +73,9 @@ async update(@Param('id', ParseIntPipe) id: number, @Body() updateDto: UpdateEst
 async patch(@Param('id', ParseIntPipe) id: number, @Body() dto: Partial<UpdateEstoqueDto>) {
   return await this.service.patch(id, dto);
 }
-    
+   
+  @UseGuards(ExternalApiAuthGuard)
+  @ApiBearerAuth()
   @Delete(':id')
   @ApiOperation({ summary: 'remove um estoque' })
   @ApiResponse({ status: 204, description: 'estoque removido com sucesso.' })

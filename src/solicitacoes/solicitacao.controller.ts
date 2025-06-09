@@ -1,9 +1,10 @@
-import {  Body,  Controller,  Delete,  Get,  Param,  Post,  Put,} from '@nestjs/common';
+import {  Body,  Controller,  Delete,  Get,  Param,  Post,  Put, UseGuards,} from '@nestjs/common';
 import { SolicitacoesService } from './solicitacao.service';
 import { CreateSolicitacaoDto } from './dto/create-solicitacao.dto';
 import { UpdateSolicitacaoDto } from './dto/update-solicitacao.dto';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { Patch, ParseIntPipe } from '@nestjs/common';
+import { ExternalApiAuthGuard } from 'src/auth/external-api.guard';
 
 
 @ApiResponse({ status: 200, description: 'Solicitação aprovada com sucesso.' })
@@ -45,6 +46,8 @@ export class SolicitacaoController {
 export class SolicitacoesController {
   constructor(private readonly service: SolicitacoesService) {}
 
+    @UseGuards(ExternalApiAuthGuard)
+    @ApiBearerAuth()
   @Post()
   create(@Body() dto: CreateSolicitacaoDto) {
     return this.service.create(dto);
@@ -60,11 +63,15 @@ export class SolicitacoesController {
     return this.service.findById(Number(id));
   }
 
+    @UseGuards(ExternalApiAuthGuard)
+  @ApiBearerAuth()
   @Put(':id')
   update(@Param('id') id: string, @Body() dto: UpdateSolicitacaoDto) {
     return this.service.update(Number(id), dto);
   }
 
+    @UseGuards(ExternalApiAuthGuard)
+  @ApiBearerAuth()
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.service.remove(Number(id));

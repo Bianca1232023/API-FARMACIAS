@@ -2,16 +2,17 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Put, U
 import { RemediosService } from './remedios.service';
 import { CreateRemedioDto } from './dto/create-remedio.dto';
 import { UpdateRemedioDto } from './dto/update-remedio.dto';
-import { ApiTags, ApiOperation, ApiParam, ApiBody, ApiResponse } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-
+import { ApiTags, ApiOperation, ApiParam, ApiBody, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+//import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { ExternalApiAuthGuard } from 'src/auth/external-api.guard';
 @ApiTags('remedios')
 @Controller('remedios')
 
 export class RemediosController {
   constructor(private readonly remediosService: RemediosService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(ExternalApiAuthGuard)
+  @ApiBearerAuth()
   @Post()
   @ApiOperation({summary: 'cria novo remedio'})
   @ApiBody({ type: CreateRemedioDto})
@@ -65,7 +66,8 @@ export class RemediosController {
     return this.remediosService.findByPrincipio_Ativo(principio_ativo);
   }
 
-  @UseGuards(JwtAuthGuard)
+    @UseGuards(ExternalApiAuthGuard)
+  @ApiBearerAuth()
   @Put(':id')
   @ApiOperation({ summary: 'Atualizar remédio por ID' })
   @ApiParam({ name: 'id', type: Number })
@@ -75,8 +77,8 @@ export class RemediosController {
   updateAll(@Param('id') id: string,@Body() updateRemedioDto: UpdateRemedioDto) {
     return this.remediosService.updateAll(+id, updateRemedioDto);
   }
-
-  @UseGuards(JwtAuthGuard)
+    @UseGuards(ExternalApiAuthGuard)
+  @ApiBearerAuth()
   @Patch(':id/principio_ativo')
   @ApiOperation({ summary: 'Atualizar princípio ativo de um remédio por ID' })
   @ApiParam({ name: 'id', type: Number })
@@ -96,7 +98,8 @@ export class RemediosController {
     return this.remediosService.findByNome(nome);
   }
 
-  @UseGuards(JwtAuthGuard)
+    @UseGuards(ExternalApiAuthGuard)
+  @ApiBearerAuth()
   @Patch(':id')
   @ApiOperation({ summary: 'Atualizar parcialmente um remédio por ID' })
   @ApiParam({ name: 'id', type: Number })
@@ -107,7 +110,8 @@ export class RemediosController {
     return this.remediosService.update(+id, updateRemedioDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+    @UseGuards(ExternalApiAuthGuard)
+  @ApiBearerAuth()
   @Patch(':id/atualizar-categoria')
   @ApiOperation({ summary: 'Atualizar categoria de um remédio por ID' })
   @ApiParam({ name: 'id', type: Number })
@@ -117,7 +121,8 @@ export class RemediosController {
     return this.remediosService.updateCategoria(+id, body.categoria); 
   }
 
-  @UseGuards(JwtAuthGuard)
+    @UseGuards(ExternalApiAuthGuard)
+  @ApiBearerAuth()
   @Delete(':id')
   @ApiOperation({ summary: 'Remover um remédio por ID' })
   @ApiParam({ name: 'id', type: Number })
