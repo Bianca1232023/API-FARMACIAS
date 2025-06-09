@@ -17,21 +17,22 @@ import { Solicitacao } from './solicitacoes/solicitacao.model';
 import { SolicitacoesModule } from './solicitacoes/solicitacao.module';
 import { Receita } from './receita/receita.model';
 import { ReceitaModule } from './receita/receita-module';
-
+import * as dotenv from 'dotenv';
+import { ConfigModule } from '@nestjs/config';
+dotenv.config();
 @Module({
 
   imports: [
+        ConfigModule.forRoot({
+      isGlobal: true,  // <-- torna o ConfigModule disponível globalmente
+    }),
     SequelizeModule.forRoot({// Configuração do Sequelize para conexão com o banco de dados
       dialect: 'postgres',
-      //host: 'bsi.cefet-rj.br',//foi alterada para banco local pois o servidor do cefet caiu, impedindo a continuação do projeto
-      host: 'localhost',
-      //port: 15432,
+      host: process.env.DB_HOST_FARMACIAS,
       port: 5432,
-      //username: 'livialyrio',
       username: 'postgres',
-      //password: '123456',
-      password: 'root',
-      database: 'db_farmaciasDigitaisSociais',
+      password: process.env.DB_SENHA_FARMACIAS,
+      database: process.env.DB_NAME_FARMACIAS,
       models: [Farmacia, DoacaoRemedio, Usuario, Remedio, Estoque, Solicitacao, Receita],
       autoLoadModels: true,
       synchronize: true,
