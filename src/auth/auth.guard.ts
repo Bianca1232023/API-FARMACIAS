@@ -1,39 +1,11 @@
-/*import {
-  Injectable,
-  CanActivate,
-  ExecutionContext,
-  UnauthorizedException,
-  Inject,
-  forwardRef,
-} from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { Controller, Get, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
-@Injectable()
-export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService) {}
-
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
-    const authHeader = request.headers['authorization'];
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw new UnauthorizedException('Token não fornecido');
-    }
-
-    const token = authHeader.split(' ')[1];
-
-    try {
-      await this.authService.validarToken(token);
-      return true;
-    } catch (err) {
-      throw new UnauthorizedException('Token inválido ou expirado');
-    }
+@Controller('exemplo')
+export class ExemploController {
+  @UseGuards(JwtAuthGuard)
+  @Get('protegido')
+  getProtegido() {
+    return { mensagem: 'Rota protegida!' };
   }
-}*/
-
-import { Injectable } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-
-@Injectable()
-export class JwtAuthGuard extends AuthGuard('jwt') {}
-
+}

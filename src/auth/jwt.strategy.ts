@@ -1,18 +1,47 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { Request } from 'express';
+import { ConfigService } from '@nestjs/config'; 
+import fetch from 'node-fetch';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(private configService: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ignoreExpiration: false,
-      secretOrKey: process.env.JWT_SECRET || 'defaultsecret', 
+      ignoreExpiration: true,
+      secretOrKey: configService.get<string>('JWT_SECRET'), // aqui usa a instância
+      passReqToCallback: true,
     });
   }
 
-  async validate(payload: any) {
-    return { id: payload.id, email: payload.email, nome: payload.nome };
+
+  async validate(req: Request, payload: any) {
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) {
+      throw new UnauthorizedException('Token não encontrado no header');
+    }
+    const token = authHeader.split(' ')[1];
+
+    try {
+      const response = await fetch('http://localhost:3000/auth/validate', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new UnauthorizedException('Token inválido ou não autorizado');
+      }
+
+      // Apenas retorna o JSON da resposta (sem verificar propriedades)
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      throw new UnauthorizedException('Erro ao validar o token: ' + error.message);
+    }
   }
 }
+
