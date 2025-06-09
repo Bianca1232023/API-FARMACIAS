@@ -6,7 +6,7 @@ import { ApiTags, ApiOperation, ApiParam, ApiBody, ApiResponse, ApiBearerAuth } 
 import { ExternalApiAuthGuard } from 'src/auth/external-api.guard';
 @ApiTags('remedios')
 @Controller('remedios')
-
+//teste
 export class RemediosController {
   constructor(private readonly remediosService: RemediosService) {}
 
