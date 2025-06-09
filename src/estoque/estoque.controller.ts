@@ -14,9 +14,10 @@ export class EstoqueController {
   @Get('aviso')
   @ApiOperation({ summary: 'Lista remédios com estoque baixo (<= 3)' })
   @ApiResponse({ status: 200, description: 'Lista de remédios com estoque baixo.' })
+  @ApiResponse({ status: 204, description: 'Não tem nennhum remédio com estoque baixo.' })
   async findLowStock() {
     return this.service.findLowStock();
-  } 
+  }
 
   @Post()
   @ApiOperation({ summary: 'Criar um novo item de estoque' })
