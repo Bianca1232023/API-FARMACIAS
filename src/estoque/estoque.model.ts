@@ -7,7 +7,7 @@ export class Estoque extends Model<Estoque> {
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.INTEGER)
-  declare id: number;
+  declare estoqueId: number;
 
   @ApiProperty()
   @Column(DataType.INTEGER)
