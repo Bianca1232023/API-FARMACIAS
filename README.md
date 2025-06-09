@@ -21,13 +21,12 @@
 </p>
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-## Descrição do Desenvolvimento 
+<h3>Descrição do Desenvolvimento</h3>
 
 RECURSOS UTILIZADOS:
+Sequelize, Nest, Swagger e Fetch
 
-Sequelize, Nest, Swagger, Fetch
-
-REGRAS DE NEGÓCIO 
+REGRAS DE NEGÓCIOS:
 
 + Uma solicitação não pode ser aprovada se a receita não for válida ou o remédio solicitado não estiver disponível. 
 + Uma receita não pode ser cadastrada com a data de criação anterior a 3 meses do solicitado.
