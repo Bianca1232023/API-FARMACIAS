@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateEstoqueDto } from './dto/create-estoque.dto';
 import { UpdateEstoqueDto } from './dto/update-estoque.dto';
@@ -23,24 +27,28 @@ export class EstoqueService {
     return estoque;
   }
 
-//regra de negocio: ao atualizar o estoque, se a quantidade disponível for menor ou igual a zero, o estoque deve ser removido
-async update(id: number, updateDto: UpdateEstoqueDto): Promise<Estoque> {
+  //regra de negocio: ao atualizar o estoque, se a quantidade disponível for menor ou igual a zero, o estoque deve ser removido
+  async update(id: number, updateDto: UpdateEstoqueDto): Promise<Estoque> {
     const estoque = await this.findOne(id);
     await estoque.update(updateDto);
     if (estoque.quantidade_disponivel <= 0) {
       await this.remove(estoque.estoqueId);
-      throw new NotFoundException(`Estoque com ID ${id} foi removido pois a quantidade zerou.`);
+      throw new NotFoundException(
+        `Estoque com ID ${id} foi removido pois a quantidade zerou.`,
+      );
     }
     return estoque;
   }
 
-//regra de negocio: ao atualizar o estoque, se a quantidade disponível for menor ou igual a zero, o estoque deve ser removido
+  //regra de negocio: ao atualizar o estoque, se a quantidade disponível for menor ou igual a zero, o estoque deve ser removido
   async patch(id: number, dto: Partial<UpdateEstoqueDto>): Promise<Estoque> {
     const estoque = await this.findOne(id);
     await estoque.update(dto);
     if (estoque.quantidade_disponivel <= 0) {
       await this.remove(estoque.estoqueId);
-      throw new NotFoundException(`Estoque com ID ${id} foi removido pois a quantidade zerou.`); 
+      throw new NotFoundException(
+        `Estoque com ID ${id} foi removido pois a quantidade zerou.`,
+      );
     }
     return estoque;
   }
@@ -64,15 +72,23 @@ async update(id: number, updateDto: UpdateEstoqueDto): Promise<Estoque> {
    Regra de negócio: O medicamento doado deve ter quantidade suficiente em estoque para atender à solicitação.
    Regra de negócio: Após cada doação, o sistema deve atualizar automaticamente o estoque da farmácia.
    */
-  async doarMedicamentoEstoque(farmaciaId: number, remedioId: number, quantidade: number) {
+  async doarMedicamentoEstoque(
+    farmaciaId: number,
+    remedioId: number,
+    quantidade: number,
+  ) {
     const estoque = await this.estoqueModel.findOne({
       where: { farmaciaId, remedioId },
     });
     if (!estoque) {
-      throw new BadRequestException('Não há estoque para esse medicamento na farmácia informada.');
+      throw new BadRequestException(
+        'Não há estoque para esse medicamento na farmácia informada.',
+      );
     }
     if (estoque.quantidade_disponivel < quantidade) {
-      throw new BadRequestException('Quantidade insuficiente em estoque para a doação.');
+      throw new BadRequestException(
+        'Quantidade insuficiente em estoque para a doação.',
+      );
     }
     estoque.quantidade_disponivel -= quantidade;
     await estoque.save();
@@ -89,12 +105,13 @@ async update(id: number, updateDto: UpdateEstoqueDto): Promise<Estoque> {
     return !!remedio; // retorna true se encontrou, false caso contrário
   }
 
-//regra de negocio para aviso de estoque baixo estoque baixo
- async findLowStock() {
-  return await this.estoqueModel.findAll({//esse endpoint retorna todos os remédios com estoque baixo e posteriormente o aviso de fato será implementado com o front-end
-    where: {
-      quantidade_disponivel: { [Op.lte]: 3 },
-    },
-  });
-}
+  //regra de negocio para aviso de estoque baixo estoque baixo
+  async findLowStock() {
+    return await this.estoqueModel.findAll({
+      //esse endpoint retorna todos os remédios com estoque baixo e posteriormente o aviso de fato será implementado com o front-end
+      where: {
+        quantidade_disponivel: { [Op.lte]: 3 },
+      },
+    });
+  }
 }

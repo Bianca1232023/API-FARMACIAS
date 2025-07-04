@@ -63,20 +63,26 @@ describe('EstoqueService', () => {
     const dto = { quantidade_disponivel: 6 };
     mockEstoqueModel.update.mockResolvedValue([1]);
     expect(await service.update(1, dto)).toEqual([1]);
-    expect(mockEstoqueModel.update).toHaveBeenCalledWith(dto, { where: { id: 1 } });
+    expect(mockEstoqueModel.update).toHaveBeenCalledWith(dto, {
+      where: { id: 1 },
+    });
   });
 
   it('atualiza estoque (PATCH)', async () => {
     const dto = { quantidade_disponivel: 4 };
     mockEstoqueModel.update.mockResolvedValue([1]);
     expect(await service.patch(1, dto)).toEqual([1]);
-    expect(mockEstoqueModel.update).toHaveBeenCalledWith(dto, { where: { id: 1 } });
+    expect(mockEstoqueModel.update).toHaveBeenCalledWith(dto, {
+      where: { id: 1 },
+    });
   });
 
   it('remove estoque', async () => {
     const estoque = { destroy: jest.fn().mockResolvedValue(undefined) };
     jest.spyOn(service, 'findOne').mockResolvedValue(estoque as any);
-    expect(await service.remove(1)).toEqual({ message: 'Estoque removido com sucesso' });
+    expect(await service.remove(1)).toEqual({
+      message: 'Estoque removido com sucesso',
+    });
     expect(estoque.destroy).toHaveBeenCalled();
   });
 
@@ -84,33 +90,37 @@ describe('EstoqueService', () => {
     const data = [{ id: 5, farmaciaId: 2 }];
     mockEstoqueModel.findAll.mockResolvedValue(data);
     expect(await service.findByFarmacia(2)).toEqual(data);
-    expect(mockEstoqueModel.findAll).toHaveBeenCalledWith({ where: { farmaciaId: 2 } });
+    expect(mockEstoqueModel.findAll).toHaveBeenCalledWith({
+      where: { farmaciaId: 2 },
+    });
   });
 
   it('filtra por remedio', async () => {
     const data = [{ id: 6, remedioId: 9 }];
     mockEstoqueModel.findAll.mockResolvedValue(data);
     expect(await service.findByRemedio(9)).toEqual(data);
-    expect(mockEstoqueModel.findAll).toHaveBeenCalledWith({ where: { remedioId: 9 } });
+    expect(mockEstoqueModel.findAll).toHaveBeenCalledWith({
+      where: { remedioId: 9 },
+    });
   });
 
-//Regra de negócio: Uma farmácia só pode doar medicamentos que estejam em estoque.
+  //Regra de negócio: Uma farmácia só pode doar medicamentos que estejam em estoque.
   describe('doarMedicamento', () => {
-  it('retorna null se não houver estoque', async () => {
-    mockEstoqueModel.findOne.mockResolvedValue(null);
-    const result = await service.doarMedicamentoEstoque(1, 1, 5);
-    expect(result).toBeNull(); 
-  });
+    it('retorna null se não houver estoque', async () => {
+      mockEstoqueModel.findOne.mockResolvedValue(null);
+      const result = await service.doarMedicamentoEstoque(1, 1, 5);
+      expect(result).toBeNull();
+    });
 
-//Regra de negócio: O medicamento doado deve ter quantidade suficiente em estoque para atender à solicitação.
-  it('retorna null se a quantidade for insuficiente', async () => {
-    const estoque = { quantidade_disponivel: 3 };
-    mockEstoqueModel.findOne.mockResolvedValue(estoque);
-    const result = await service.doarMedicamentoEstoque(1, 1, 5);
-    expect(result).toBeNull(); 
-  });
+    //Regra de negócio: O medicamento doado deve ter quantidade suficiente em estoque para atender à solicitação.
+    it('retorna null se a quantidade for insuficiente', async () => {
+      const estoque = { quantidade_disponivel: 3 };
+      mockEstoqueModel.findOne.mockResolvedValue(estoque);
+      const result = await service.doarMedicamentoEstoque(1, 1, 5);
+      expect(result).toBeNull();
+    });
 
-//Regra de negócio: Após cada doação, o sistema deve atualizar automaticamente o estoque da farmácia.
+    //Regra de negócio: Após cada doação, o sistema deve atualizar automaticamente o estoque da farmácia.
     it('realiza a doação e atualiza o estoque', async () => {
       const estoque = {
         quantidade_disponivel: 10,
@@ -120,7 +130,9 @@ describe('EstoqueService', () => {
       const result = await service.doarMedicamentoEstoque(1, 1, 4);
       expect(estoque.quantidade_disponivel).toBe(6);
       expect(estoque.save).toHaveBeenCalled();
-      expect(result.message).toBe('Doação realizada com sucesso e estoque atualizado.');
+      expect(result.message).toBe(
+        'Doação realizada com sucesso e estoque atualizado.',
+      );
     });
   });
 });

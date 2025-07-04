@@ -14,7 +14,10 @@ export class CreateDoacaoRemedioDto {
   @IsNumber()
   remedioId: number;
 
-  @ApiProperty({ example: 2, description: 'Quantidade de unidades/caixas de remédio doadas' })
+  @ApiProperty({
+    example: 2,
+    description: 'Quantidade de unidades/caixas de remédio doadas',
+  })
   @IsNumber()
   @IsNotEmpty()
   quantidade: number;
@@ -25,7 +28,7 @@ export class CreateDoacaoRemedioDto {
   data_doacao: Date;
 
   @ApiProperty({ example: '2025-07-01', description: 'Data fim do tratamento' })
-  @ IsDate()
+  @IsDate()
   @IsNotEmpty()
   data_fim_tratamento: Date;
 }

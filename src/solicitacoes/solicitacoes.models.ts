@@ -1,6 +1,6 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
-@Table({ tableName: 'solicitacoes', timestamps: false }) 
+@Table({ tableName: 'solicitacoes', timestamps: false })
 export class Solicitacao extends Model<Solicitacao> {
   @Column({ type: DataType.INTEGER })
   usuarioId: number;

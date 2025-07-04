@@ -1,5 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement, ForeignKey } from 'sequelize-typescript';
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  PrimaryKey,
+  AutoIncrement,
+  ForeignKey,
+} from 'sequelize-typescript';
 import { Farmacia } from 'src/farmacias/farmacias.model';
 
 @Table({ tableName: 'estoque', timestamps: false })

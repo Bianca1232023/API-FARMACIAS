@@ -9,7 +9,7 @@ describe('UsuariosController', () => {
 
   beforeEach(async () => {
     const mockService = {
-      create: jest.fn(dto => {
+      create: jest.fn((dto) => {
         if (!dto.cpf || !dto.email) {
           throw new Error('CPF e Email são obrigatórios');
         }
@@ -19,17 +19,19 @@ describe('UsuariosController', () => {
         return { id: Date.now(), ...dto };
       }),
       findAll: jest.fn(() => Promise.resolve([])),
-      findOne: jest.fn(id => Promise.resolve({ id: Number(id) })),
+      findOne: jest.fn((id) => Promise.resolve({ id: Number(id) })),
       update: jest.fn((id, dto) => Promise.resolve({ id: Number(id), ...dto })),
-      remove: jest.fn(id => {
+      remove: jest.fn((id) => {
         if (id === '5') {
           return Promise.reject(new Error('Funcionário não pode ser removido'));
         }
         return Promise.resolve();
       }),
-      findByEmail: jest.fn(email => Promise.resolve({ email })),
+      findByEmail: jest.fn((email) => Promise.resolve({ email })),
       findFuncionarios: jest.fn(() => Promise.resolve([{ funcionario: true }])),
-      findByFarmaciaId: jest.fn(farmaciaId => Promise.resolve([{ farmaciaId: Number(farmaciaId) }])),
+      findByFarmaciaId: jest.fn((farmaciaId) =>
+        Promise.resolve([{ farmaciaId: Number(farmaciaId) }]),
+      ),
       patch: jest.fn((id, dto) => Promise.resolve({ id: Number(id), ...dto })),
     };
 
@@ -91,7 +93,7 @@ describe('UsuariosController', () => {
 
   it('Retornar apenas os usuarios que sao funcionarios', async () => {
     const funcionarios = await controller.findFuncionarios();
-    expect(funcionarios.every(f => f.funcionario)).toBe(true);
+    expect(funcionarios.every((f) => f.funcionario)).toBe(true);
   });
 
   it('Retornar usuarios pelo ID da farmacia', async () => {
@@ -104,16 +106,23 @@ describe('UsuariosController', () => {
     expect(patched?.funcionario).toBe(true);
   });
 
-// Regra de negócio: CPF e email são obrigatórios para cadastro completo
+  // Regra de negócio: CPF e email são obrigatórios para cadastro completo
   it('Deve lançar erro ao cadastrar usuário sem CPF ou email', async () => {
     const dto: any = { nome: 'Fulano', funcionario: false };
-    await expect(controller.create(dto))
-      .rejects.toThrow('CPF e Email são obrigatórios');
+    await expect(controller.create(dto)).rejects.toThrow(
+      'CPF e Email são obrigatórios',
+    );
   });
 
-// REGRA DE NEGÓCIO: Evitar duplicidade de CPF.
+  // REGRA DE NEGÓCIO: Evitar duplicidade de CPF.
   it('Deve lançar erro ao tentar cadastrar CPF já existente', async () => {
-    await expect(controller.create({ nome: 'Fulano', cpf: '123', email: 'a@a.com', funcionario: false } as any))
-      .rejects.toThrow('CPF já cadastrado');
+    await expect(
+      controller.create({
+        nome: 'Fulano',
+        cpf: '123',
+        email: 'a@a.com',
+        funcionario: false,
+      } as any),
+    ).rejects.toThrow('CPF já cadastrado');
   });
 });

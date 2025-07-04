@@ -8,6 +8,6 @@ import { EstoqueController } from './estoque.controller';
   imports: [SequelizeModule.forFeature([Estoque])],
   controllers: [EstoqueController],
   providers: [EstoqueService],
-  exports: [EstoqueService],//adiiconei
+  exports: [EstoqueService], //adiiconei
 })
 export class EstoqueModule {}

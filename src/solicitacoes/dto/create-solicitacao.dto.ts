@@ -14,7 +14,10 @@ export class CreateSolicitacaoDto {
   @IsNumber()
   farmaciaId: number;
 
-  @ApiProperty({ example: "alguma coisa", description: 'Justificativa da solicitação' })
+  @ApiProperty({
+    example: 'alguma coisa',
+    description: 'Justificativa da solicitação',
+  })
   @IsString()
   @IsNotEmpty()
   justificativa: string;

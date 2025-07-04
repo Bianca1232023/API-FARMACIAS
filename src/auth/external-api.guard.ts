@@ -4,7 +4,7 @@ import {
   ExecutionContext,
   UnauthorizedException,
 } from '@nestjs/common';
-import fetch from 'node-fetch'; 
+import fetch from 'node-fetch';
 
 @Injectable()
 export class ExternalApiAuthGuard implements CanActivate {
@@ -15,7 +15,9 @@ export class ExternalApiAuthGuard implements CanActivate {
     const authHeader = request.headers['authorization'];
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw new UnauthorizedException('Token de autorização não encontrado ou mal formatado.');
+      throw new UnauthorizedException(
+        'Token de autorização não encontrado ou mal formatado.',
+      );
     }
 
     const token = authHeader.split(' ')[1];
@@ -29,13 +31,11 @@ export class ExternalApiAuthGuard implements CanActivate {
         },
       });
 
-
       if (response.ok) {
+        const data = await response.json();
 
-        const data = await response.json(); 
-        
-        request.user = data; 
-        
+        request.user = data;
+
         return true;
       } else {
         throw new UnauthorizedException('Token inválido ou sessão expirada.');
@@ -44,7 +44,9 @@ export class ExternalApiAuthGuard implements CanActivate {
       if (error instanceof UnauthorizedException) {
         throw error;
       }
-      throw new UnauthorizedException('Erro ao conectar com o serviço de autenticação.');
+      throw new UnauthorizedException(
+        'Erro ao conectar com o serviço de autenticação.',
+      );
     }
   }
 }

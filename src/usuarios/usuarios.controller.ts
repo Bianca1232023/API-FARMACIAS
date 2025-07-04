@@ -1,23 +1,43 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, Patch, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+  Patch,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { UsuariosService } from './usuarios.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { Usuario } from './usuarios.model';
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ExternalApiAuthGuard } from 'src/auth/external-api.guard';
 
-
 @ApiTags('usuarios')
-
+@ApiBearerAuth()
+@UseGuards(ExternalApiAuthGuard)
 @Controller('usuarios')
 export class UsuariosController {
   constructor(private readonly usuariosService: UsuariosService) {}
 
-  @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth()
   @Post()
   @ApiOperation({ summary: 'Cria um novo usuário' })
-  @ApiResponse({ status: 201, description: 'Usuário criado com sucesso.', type: Usuario })
+  @ApiResponse({
+    status: 201,
+    description: 'Usuário criado com sucesso.',
+    type: Usuario,
+  })
   @ApiResponse({ status: 400, description: 'Dados inválidos.' })
   @ApiBody({ type: CreateUsuarioDto })
   create(@Body() createUsuarioDto: CreateUsuarioDto) {
@@ -26,7 +46,11 @@ export class UsuariosController {
 
   @Get()
   @ApiOperation({ summary: 'Lista todos os usuários' })
-  @ApiResponse({ status: 200, description: 'Lista de usuários retornada com sucesso.', type: [Usuario] })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de usuários retornada com sucesso.',
+    type: [Usuario],
+  })
   @ApiResponse({ status: 400, description: 'Dados inválidos.' })
   findAll() {
     return this.usuariosService.findAll();
@@ -34,7 +58,11 @@ export class UsuariosController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Busca um usuário pelo ID' })
-  @ApiResponse({ status: 200, description: 'Usuário encontrado.', type: Usuario })
+  @ApiResponse({
+    status: 200,
+    description: 'Usuário encontrado.',
+    type: Usuario,
+  })
   @ApiResponse({ status: 400, description: 'Dados inválidos.' })
   @ApiParam({ name: 'id', type: Number })
   findOne(@Param('id') id: string) {
@@ -43,7 +71,11 @@ export class UsuariosController {
 
   @Get('email/:email')
   @ApiOperation({ summary: 'Busca usuário pelo e-mail' })
-  @ApiResponse({ status: 200, description: 'Usuário encontrado com sucesso.', type: Usuario })
+  @ApiResponse({
+    status: 200,
+    description: 'Usuário encontrado com sucesso.',
+    type: Usuario,
+  })
   @ApiResponse({ status: 400, description: 'Dados inválidos.' })
   @ApiParam({ name: 'email', type: String })
   findByEmail(@Param('email') email: string) {
@@ -52,7 +84,11 @@ export class UsuariosController {
 
   @Get('funcionarios')
   @ApiOperation({ summary: 'Retorna apenas usuários que são funcionários' })
-  @ApiResponse({ status: 200, description: 'Usuários funcionários retornados.', type: [Usuario] })
+  @ApiResponse({
+    status: 200,
+    description: 'Usuários funcionários retornados.',
+    type: [Usuario],
+  })
   @ApiResponse({ status: 400, description: 'Dados inválidos.' })
   findFuncionarios() {
     return this.usuariosService.findFuncionarios();
@@ -60,18 +96,24 @@ export class UsuariosController {
 
   @Get('farmacia/:id')
   @ApiOperation({ summary: 'Retorna usuários por ID da farmácia' })
-  @ApiResponse({ status: 200, description: 'Usuários da farmácia encontrados.', type: [Usuario] })
+  @ApiResponse({
+    status: 200,
+    description: 'Usuários da farmácia encontrados.',
+    type: [Usuario],
+  })
   @ApiResponse({ status: 400, description: 'Dados inválidos.' })
   @ApiParam({ name: 'id', type: Number })
   findByFarmaciaId(@Param('id') id: string) {
     return this.usuariosService.findByFarmaciaId(+id);
   }
 
-  @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth()
   @Put(':id')
   @ApiOperation({ summary: 'Atualiza um usuário por completo' })
-  @ApiResponse({ status: 200, description: 'Usuário atualizado com sucesso.', type: Usuario })
+  @ApiResponse({
+    status: 200,
+    description: 'Usuário atualizado com sucesso.',
+    type: Usuario,
+  })
   @ApiResponse({ status: 400, description: 'Dados inválidos.' })
   @ApiParam({ name: 'id', type: Number })
   @ApiBody({ type: UpdateUsuarioDto })
@@ -79,11 +121,13 @@ export class UsuariosController {
     return this.usuariosService.update(+id, updateUsuarioDto);
   }
 
-  @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth()
   @Patch(':id')
   @ApiOperation({ summary: 'Atualiza parcialmente um usuário' })
-  @ApiResponse({ status: 200, description: 'Usuário atualizado parcialmente com sucesso.', type: Usuario })
+  @ApiResponse({
+    status: 200,
+    description: 'Usuário atualizado parcialmente com sucesso.',
+    type: Usuario,
+  })
   @ApiResponse({ status: 400, description: 'Dados inválidos.' })
   @ApiParam({ name: 'id', type: Number })
   @ApiBody({ type: UpdateUsuarioDto })
@@ -91,8 +135,6 @@ export class UsuariosController {
     return this.usuariosService.patch(+id, data);
   }
 
-  @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth()
   @Delete(':id')
   @ApiOperation({ summary: 'Remove um usuário' })
   @ApiResponse({ status: 204, description: 'Usuário removido com sucesso.' })

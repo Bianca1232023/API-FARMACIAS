@@ -1,21 +1,27 @@
-import { Table, Column, Model, DataType, PrimaryKey } from 'sequelize-typescript';
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  PrimaryKey,
+} from 'sequelize-typescript';
 import { Col } from 'sequelize/types/utils';
 
 @Table({ tableName: 'remedios', timestamps: false })
 export class Remedio extends Model {
   @PrimaryKey
-  @Column({type: DataType.INTEGER, autoIncrement: true, primaryKey: true})  
+  @Column({ type: DataType.INTEGER, autoIncrement: true, primaryKey: true })
   remedioId: number;
   @Column({ type: DataType.STRING(100), allowNull: false })
   nome: string;
 
-  @Column({ type: DataType.STRING(100)})
+  @Column({ type: DataType.STRING(100) })
   principio_ativo: string;
 
-  @Column({type: DataType.STRING(25)})
+  @Column({ type: DataType.STRING(25) })
   categoria: string;
 
-  @Column({type: DataType.STRING(10)})
+  @Column({ type: DataType.STRING(10) })
   dosagem: string;
 
   @Column({ type: DataType.STRING(50) })
@@ -23,5 +29,4 @@ export class Remedio extends Model {
 
   @Column({ type: DataType.INTEGER }) //
   quantidade: number;
-
 }

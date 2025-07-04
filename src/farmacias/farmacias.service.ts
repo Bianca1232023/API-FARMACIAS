@@ -13,7 +13,7 @@ export class FarmaciasService {
     private farmaciaModel: typeof Farmacia,
   ) {}
 
- async create(dto: CreateFarmaciaDto): Promise<Farmacia> {
+  async create(dto: CreateFarmaciaDto): Promise<Farmacia> {
     return await this.farmaciaModel.create({ ...dto });
   }
 
@@ -25,46 +25,47 @@ export class FarmaciasService {
     return await this.farmaciaModel.findByPk(id);
   }
 
-async findByBairro(bairro: string): Promise<Farmacia[]> {
+  async findByBairro(bairro: string): Promise<Farmacia[]> {
     const farmacias = await this.farmaciaModel.findAll({
-      where: where(
-        fn('LOWER', col('bairro')),
-        bairro.toLowerCase()
-      )
+      where: where(fn('LOWER', col('bairro')), bairro.toLowerCase()),
     });
 
     if (!farmacias || farmacias.length === 0) {
-      throw new NotFoundException(`Nenhuma farmácia encontrada para o bairro: ${bairro}`);
+      throw new NotFoundException(
+        `Nenhuma farmácia encontrada para o bairro: ${bairro}`,
+      );
     }
 
     return farmacias;
-}
+  }
 
-async findByCidade(cidade: string): Promise<Farmacia[]> {
+  async findByCidade(cidade: string): Promise<Farmacia[]> {
     const farmacias = await this.farmaciaModel.findAll({
-      where: where(
-        fn('LOWER', col('cidade')),
-        cidade.toLowerCase()
-      )
+      where: where(fn('LOWER', col('cidade')), cidade.toLowerCase()),
     });
-    
+
     if (!farmacias || farmacias.length === 0) {
-      throw new NotFoundException(`Nenhuma farmácia encontrada para a cidade: ${cidade}`);
+      throw new NotFoundException(
+        `Nenhuma farmácia encontrada para a cidade: ${cidade}`,
+      );
     }
 
     return farmacias;
-}
+  }
 
- async update(id: number, updateDto: UpdateFarmaciaDto): Promise<Farmacia> {
-    const farmacia = await this.findOne(id) as Farmacia;
+  async update(id: number, updateDto: UpdateFarmaciaDto): Promise<Farmacia> {
+    const farmacia = (await this.findOne(id)) as Farmacia;
 
     await farmacia.update(updateDto);
 
     return farmacia;
   }
 
-  async patch(id: number, partialDto: Partial<UpdateFarmaciaDto>): Promise<Farmacia> {
-    const farmacia = await this.findOne(id) as Farmacia;
+  async patch(
+    id: number,
+    partialDto: Partial<UpdateFarmaciaDto>,
+  ): Promise<Farmacia> {
+    const farmacia = (await this.findOne(id)) as Farmacia;
 
     await farmacia.update(partialDto);
 
@@ -72,26 +73,34 @@ async findByCidade(cidade: string): Promise<Farmacia[]> {
   }
 
   async remove(id: number): Promise<{ message: string }> {
-    const farmacia = await this.farmaciaModel.findOne({ where: { farmaciaId: id } });
+    const farmacia = await this.farmaciaModel.findOne({
+      where: { farmaciaId: id },
+    });
     if (farmacia) await farmacia.destroy();
     return { message: 'Farmácia removida' };
   }
 
   async findPharmaciesByRemedioId(remedioId: number): Promise<Farmacia[]> {
     const farmacias = await this.farmaciaModel.findAll({
-      include: [{model: Estoque, as: 'estoques', required: true, 
-        where: {remedioId: remedioId,quantidade_disponivel: {[Op.gt]: 0,},},
-      }],
-
+      include: [
+        {
+          model: Estoque,
+          as: 'estoques',
+          required: true,
+          where: {
+            remedioId: remedioId,
+            quantidade_disponivel: { [Op.gt]: 0 },
+          },
+        },
+      ],
     });
 
     if (!farmacias || farmacias.length === 0) {
-      throw new NotFoundException(`Nenhuma farmácia encontrada com o remédio ID ${remedioId} em estoque.`);
+      throw new NotFoundException(
+        `Nenhuma farmácia encontrada com o remédio ID ${remedioId} em estoque.`,
+      );
     }
 
     return farmacias;
   }
-
-
 }
-

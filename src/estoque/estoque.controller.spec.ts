@@ -33,10 +33,10 @@ describe('EstoqueController', () => {
   });
 
   it('criar um novo item de estoque', async () => {
-    const dto = { 
-      farmaciaId: 1, 
-      remedioId: 2, 
-      quantidade_disponivel: 10 
+    const dto = {
+      farmaciaId: 1,
+      remedioId: 2,
+      quantidade_disponivel: 10,
     };
 
     (service.create as jest.Mock).mockResolvedValue(dto);
@@ -98,7 +98,7 @@ describe('EstoqueController', () => {
     expect(result).toEqual(data);
   });
 
-//Regra de negócio: Uma farmácia só pode doar medicamentos que estejam em estoque.
+  //Regra de negócio: Uma farmácia só pode doar medicamentos que estejam em estoque.
   describe('doarMedicamento', () => {
     it('retorna null se não houver estoque', async () => {
       (service.doarMedicamentoEstoque as jest.Mock).mockResolvedValue(null);
@@ -106,14 +106,14 @@ describe('EstoqueController', () => {
       expect(result).toBeNull();
     });
 
-//Regra de negócio: O medicamento doado deve ter quantidade suficiente em estoque para atender à solicitação.
+    //Regra de negócio: O medicamento doado deve ter quantidade suficiente em estoque para atender à solicitação.
     it('retorna null se a quantidade for insuficiente', async () => {
       (service.doarMedicamentoEstoque as jest.Mock).mockResolvedValue(null);
       const result = await controller.doarMedicamento('1', '1', 10);
       expect(result).toBeNull();
     });
 
-//Regra de negócio: Após cada doação, o sistema deve atualizar automaticamente o estoque da farmácia.
+    //Regra de negócio: Após cada doação, o sistema deve atualizar automaticamente o estoque da farmácia.
     it('realiza a doação com sucesso', async () => {
       const response = {
         message: 'Doação realizada com sucesso e estoque atualizado.',

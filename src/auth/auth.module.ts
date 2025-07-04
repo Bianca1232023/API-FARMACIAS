@@ -3,8 +3,7 @@ import { AuthService } from './auth.service';
 import { ExternalApiAuthGuard } from './external-api.guard';
 
 @Module({
-  imports: [
-  ],
+  imports: [],
   providers: [AuthService, ExternalApiAuthGuard],
   exports: [AuthService, ExternalApiAuthGuard],
 })

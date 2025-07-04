@@ -19,5 +19,5 @@ module.exports = {
     database: 'db_farmaciasDigitaisSociais',
     host: 'localhost',
     dialect: 'postgres',
-  }
+  },
 };

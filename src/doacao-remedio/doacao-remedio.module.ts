@@ -6,8 +6,7 @@ import { DoacaoRemedio } from './doacao-remedio.model';
 import { Estoque } from 'src/estoque/estoque.model';
 import { Solicitacao } from 'src/solicitacoes/solicitacao.model';
 @Module({
-  imports: [ SequelizeModule.forFeature([DoacaoRemedio, Estoque, Solicitacao]),
-  ],
+  imports: [SequelizeModule.forFeature([DoacaoRemedio, Estoque, Solicitacao])],
   exports: [DoacaoRemedioService],
   controllers: [DoacaoRemedioController],
   providers: [DoacaoRemedioService],

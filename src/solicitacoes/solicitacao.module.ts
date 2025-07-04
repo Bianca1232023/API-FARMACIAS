@@ -10,6 +10,6 @@ import { Farmacia } from 'src/farmacias/farmacias.model';
   imports: [SequelizeModule.forFeature([Solicitacao, Remedio, Farmacia])],
   controllers: [SolicitacoesController],
   providers: [SolicitacoesService, Remedio],
-   exports: [SolicitacoesService]
+  exports: [SolicitacoesService],
 })
 export class SolicitacoesModule {}

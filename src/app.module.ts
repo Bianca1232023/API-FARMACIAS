@@ -20,23 +20,37 @@ import * as dotenv from 'dotenv';
 import { ConfigModule } from '@nestjs/config';
 dotenv.config();
 @Module({
-
   imports: [
-        ConfigModule.forRoot({
-      isGlobal: true,  // <-- torna o ConfigModule disponível globalmente
+    ConfigModule.forRoot({
+      isGlobal: true, // <-- torna o ConfigModule disponível globalmente
     }),
-    SequelizeModule.forRoot({// Configuração do Sequelize para conexão com o banco de dados
+    SequelizeModule.forRoot({
+      // Configuração do Sequelize para conexão com o banco de dados
       dialect: 'postgres',
       host: process.env.DB_HOST_FARMACIAS,
       port: 5432,
       username: 'postgres',
       password: process.env.DB_SENHA_FARMACIAS,
       database: process.env.DB_NAME_FARMACIAS,
-      models: [Farmacia, DoacaoRemedio, Usuario, Remedio, Estoque, Solicitacao, Receita],
+      models: [
+        Farmacia,
+        DoacaoRemedio,
+        Usuario,
+        Remedio,
+        Estoque,
+        Solicitacao,
+        Receita,
+      ],
       autoLoadModels: true,
       synchronize: true,
     }),
-    UsuariosModule, EstoqueModule, FarmaciasModule, DoacaoRemedioModule, RemediosModule, ReceitaModule, SolicitacoesModule
+    UsuariosModule,
+    EstoqueModule,
+    FarmaciasModule,
+    DoacaoRemedioModule,
+    RemediosModule,
+    ReceitaModule,
+    SolicitacoesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -16,7 +16,10 @@ export class CreateFarmaciaDto {
   @IsNotEmpty()
   bairro: string;
 
-  @ApiProperty({ example: 'Rua das Flores', description: 'Logradouro da farmácia' })
+  @ApiProperty({
+    example: 'Rua das Flores',
+    description: 'Logradouro da farmácia',
+  })
   @IsString()
   @IsNotEmpty()
   logradouro: string;

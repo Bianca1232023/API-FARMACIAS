@@ -65,7 +65,10 @@ export class SolicitacoesController {
 
   @Get()
   @ApiOperation({ summary: 'Listar todas as solicitações' })
-  @ApiResponse({ status: 200, description: 'Lista de solicitações retornada com sucesso.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de solicitações retornada com sucesso.',
+  })
   findAll() {
     return this.service.findAll();
   }
@@ -73,7 +76,10 @@ export class SolicitacoesController {
   @Get(':id')
   @ApiOperation({ summary: 'Buscar solicitação por ID' })
   @ApiParam({ name: 'id', type: Number })
-  @ApiResponse({ status: 200, description: 'Solicitação encontrada com sucesso.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Solicitação encontrada com sucesso.',
+  })
   @ApiResponse({ status: 404, description: 'Solicitação não encontrada.' })
   findById(@Param('id', ParseIntPipe) id: number) {
     return this.service.findById(id);
@@ -85,9 +91,15 @@ export class SolicitacoesController {
   @ApiOperation({ summary: 'Atualizar solicitação por ID' })
   @ApiParam({ name: 'id', type: Number })
   @ApiBody({ type: UpdateSolicitacaoDto })
-  @ApiResponse({ status: 200, description: 'Solicitação atualizada com sucesso.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Solicitação atualizada com sucesso.',
+  })
   @ApiResponse({ status: 404, description: 'Solicitação não encontrada.' })
-  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateSolicitacaoDto) {
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateSolicitacaoDto,
+  ) {
     return this.service.update(id, dto);
   }
 
@@ -96,7 +108,10 @@ export class SolicitacoesController {
   @Delete(':id')
   @ApiOperation({ summary: 'Remover solicitação por ID' })
   @ApiParam({ name: 'id', type: Number })
-  @ApiResponse({ status: 200, description: 'Solicitação removida com sucesso.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Solicitação removida com sucesso.',
+  })
   @ApiResponse({ status: 404, description: 'Solicitação não encontrada.' })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.service.remove(id);

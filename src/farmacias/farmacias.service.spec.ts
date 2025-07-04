@@ -28,8 +28,28 @@ describe('FarmaciasService', () => {
   let service: FarmaciasService;
 
   const mockFarmaciaModel = {
-    create: jest.fn().mockResolvedValue({ id: 1, cep: '12345', cidade: 'Teste', bairro: 'Centro', logradouro: 'Rua X', numero: 100 }),
-    findAll: jest.fn().mockResolvedValue([{ id: 1, cep: '12345', cidade: 'Teste', bairro: 'Centro', logradouro: 'Rua X', numero: 100 }]),
+    create: jest
+      .fn()
+      .mockResolvedValue({
+        id: 1,
+        cep: '12345',
+        cidade: 'Teste',
+        bairro: 'Centro',
+        logradouro: 'Rua X',
+        numero: 100,
+      }),
+    findAll: jest
+      .fn()
+      .mockResolvedValue([
+        {
+          id: 1,
+          cep: '12345',
+          cidade: 'Teste',
+          bairro: 'Centro',
+          logradouro: 'Rua X',
+          numero: 100,
+        },
+      ]),
     findByPk: jest.fn().mockResolvedValue(null),
   };
 

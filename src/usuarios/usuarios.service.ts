@@ -42,7 +42,10 @@ export class UsuariosService {
   }
 
   //Regra de negócio: Não permitir remover CPF nem email ao atualizar
-  async update(id: number, updateUsuarioDto: UpdateUsuarioDto): Promise<Usuario | null> {
+  async update(
+    id: number,
+    updateUsuarioDto: UpdateUsuarioDto,
+  ): Promise<Usuario | null> {
     const { cpf, email } = updateUsuarioDto;
     if (cpf == null || email == null) {
       throw new Error('Não é permitido remover CPF ou Email');
@@ -54,7 +57,10 @@ export class UsuariosService {
     return usuario;
   }
 
-  async patch(id: number, data: Partial<UpdateUsuarioDto>): Promise<Usuario | null> {
+  async patch(
+    id: number,
+    data: Partial<UpdateUsuarioDto>,
+  ): Promise<Usuario | null> {
     const usuario = await this.findOne(id);
     if (!usuario) return null;
     await usuario.update(data);

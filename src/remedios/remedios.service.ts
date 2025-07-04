@@ -34,20 +34,20 @@ export class RemediosService {
 
   async listAllCategorias() {
     const remedios = await this.remedioModel.findAll();
-    const categorias = remedios.map(r => r.categoria);
+    const categorias = remedios.map((r) => r.categoria);
     return Array.from(new Set(categorias));
-  }//consertar
+  } //consertar
 
   async findByNome(nome: string) {
     return await this.remedioModel.findAll({ where: { nome } });
   }
 
-  async findByDosagem(dosagem: string){
-    return await this.remedioModel.findAll({where: {dosagem}});
+  async findByDosagem(dosagem: string) {
+    return await this.remedioModel.findAll({ where: { dosagem } });
   }
 
-  async findByFabricante(fabricante: string){
-    return await this.remedioModel.findAll({where: {fabricante}})
+  async findByFabricante(fabricante: string) {
+    return await this.remedioModel.findAll({ where: { fabricante } });
   }
 
   async update(id: number, dto: UpdateRemedioDto) {
@@ -61,7 +61,7 @@ export class RemediosService {
     remedio.categoria = categoria;
     await remedio.save();
     return remedio;
-  }//consertar
+  } //consertar
 
   async updateAll(id: number, dto: UpdateRemedioDto) {
     const remedio = await this.findOne(id);
@@ -89,32 +89,29 @@ export class RemediosService {
   }
 
   async updateFabricante(id: number, fabricante: string) {
-  const remedio = await this.findOne(id);
-  if (!remedio) {
-    throw new NotFoundException('Remédio não encontrado');
+    const remedio = await this.findOne(id);
+    if (!remedio) {
+      throw new NotFoundException('Remédio não encontrado');
+    }
+
+    remedio.fabricante = fabricante;
+    await remedio.save();
+
+    return remedio;
   }
-
-  remedio.fabricante = fabricante;
-  await remedio.save();
-
-  return remedio;
-}
 
   async updatePrincipioAtivo(id: string, principio_ativo: string) {
     const [updatedCount] = await this.remedioModel.update(
       { principio_ativo },
-      { where: { id } }
+      { where: { id } },
     );
 
     if (updatedCount === 0) {
-      throw new NotFoundException('Remédio não encontrado ou princípio ativo igual ao atual.');
+      throw new NotFoundException(
+        'Remédio não encontrado ou princípio ativo igual ao atual.',
+      );
     }
 
     return { message: 'Princípio ativo atualizado com sucesso' };
   }
-
 }
-
-
-
-

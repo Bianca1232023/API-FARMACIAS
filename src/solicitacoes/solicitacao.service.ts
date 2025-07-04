@@ -1,7 +1,11 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Solicitacao } from './solicitacao.model';
-import { Remedio } from '../remedios/remedios.model'
+import { Remedio } from '../remedios/remedios.model';
 
 import { CreateSolicitacaoDto } from './dto/create-solicitacao.dto';
 import { UpdateSolicitacaoDto } from './dto/update-solicitacao.dto';
@@ -30,7 +34,9 @@ export class SolicitacoesService {
     return solicitacao;
   }
 
-  async listarSolicitacoesPorUsuario(usuarioId: number): Promise<Solicitacao[]> {
+  async listarSolicitacoesPorUsuario(
+    usuarioId: number,
+  ): Promise<Solicitacao[]> {
     return this.solicitacaoModel.findAll({
       where: { usuarioId },
     });
@@ -46,7 +52,8 @@ export class SolicitacoesService {
     await solicitacao.destroy();
   }
 
- async HistoricoSolicitacao(): Promise<Solicitacao[]> { //ENDPOINT DO HISTORICO DE SOLICITACAO
+  async HistoricoSolicitacao(): Promise<Solicitacao[]> {
+    //ENDPOINT DO HISTORICO DE SOLICITACAO
     return this.solicitacaoModel.findAll({
       order: [['dataCriacao', 'DESC']],
     });
@@ -79,7 +86,5 @@ export class SolicitacoesService {
     message: 'Solicitação aprovada com sucesso.',
     solicitacao,
   };
- */ 
+ */
 }
-
-

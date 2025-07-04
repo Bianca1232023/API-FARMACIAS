@@ -8,7 +8,7 @@ import { UpdateReceitaDto } from './dto/update-receita.dto';
 export class ReceitaService {
   constructor(
     @InjectModel(Receita)
-    private receitaModel: typeof Receita
+    private receitaModel: typeof Receita,
   ) {}
 
   async create(dto: CreateReceitaDto): Promise<Receita> {
@@ -35,7 +35,9 @@ export class ReceitaService {
     await receita.destroy();
   }
 
-  async verificarValidade(id: number): Promise<{ validade: boolean; diasRestantes: number }> {
+  async verificarValidade(
+    id: number,
+  ): Promise<{ validade: boolean; diasRestantes: number }> {
     const receita = await this.receitaModel.findByPk(id);
 
     if (!receita) {
@@ -47,7 +49,9 @@ export class ReceitaService {
     const diasDeValidade = 30;
 
     const diferencaEmMilissegundos = hoje.getTime() - dataCriacao.getTime();
-    const diasPassados = Math.floor(diferencaEmMilissegundos / (1000 * 60 * 60 * 24));
+    const diasPassados = Math.floor(
+      diferencaEmMilissegundos / (1000 * 60 * 60 * 24),
+    );
     const diasRestantes = diasDeValidade - diasPassados;
 
     return {

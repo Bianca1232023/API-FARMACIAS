@@ -1,14 +1,27 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { ReceitaService } from './receita.service';
 import { CreateReceitaDto } from './dto/create-receita.dto';
 import { UpdateReceitaDto } from './dto/update-receita.dto';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { ParseIntPipe } from '@nestjs/common';
 import { ExternalApiAuthGuard } from 'src/auth/external-api.guard';
 
 @ApiTags('receitas')
 @Controller('receitas')
-
 export class ReceitaController {
   constructor(private readonly service: ReceitaService) {}
 
@@ -23,7 +36,10 @@ export class ReceitaController {
 
   @Get()
   @ApiOperation({ summary: 'Lista todas as receitas' })
-  @ApiResponse({ status: 200, description: 'Lista de receitas retornada com sucesso.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de receitas retornada com sucesso.',
+  })
   findAll() {
     return this.service.findAll();
   }
@@ -36,7 +52,7 @@ export class ReceitaController {
     return this.service.findById(id);
   }
 
-    @UseGuards(ExternalApiAuthGuard)
+  @UseGuards(ExternalApiAuthGuard)
   @ApiBearerAuth()
   @Put(':id')
   @ApiOperation({ summary: 'Atualiza uma receita existente' })
@@ -46,7 +62,7 @@ export class ReceitaController {
     return this.service.update(id, dto);
   }
 
-    @UseGuards(ExternalApiAuthGuard)
+  @UseGuards(ExternalApiAuthGuard)
   @ApiBearerAuth()
   @Delete(':id')
   @ApiOperation({ summary: 'Remove uma receita pelo ID' })
@@ -58,7 +74,10 @@ export class ReceitaController {
 
   @Get(':id/validade')
   @ApiOperation({ summary: 'Verifica a validade da receita' })
-  @ApiResponse({ status: 200, description: 'Status de validade retornado com sucesso.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Status de validade retornado com sucesso.',
+  })
   @ApiResponse({ status: 404, description: 'Receita não encontrada.' })
   async verificarValidade(@Param('id', ParseIntPipe) id: number) {
     return this.service.verificarValidade(id);
