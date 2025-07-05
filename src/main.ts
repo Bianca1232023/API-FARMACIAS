@@ -1,51 +1,31 @@
 import { NestFactory } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: 'http://localhost:3001', // se der erro, testar com *
+    origin: '*', // ou especifique 'http://localhost:3001' se quiser restringir
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
-   const config = new DocumentBuilder()
-    .setTitle('API Farmácia Social')
+
+  const config = new DocumentBuilder()
+    .setTitle('API - Farmácias Digitais Sociais')
     .setDescription('Documentação da API do sistema de farmácia social')
     .setVersion('1.0')
-    .addBearerAuth(
-    {
+    .addBearerAuth({
       type: 'http',
       scheme: 'bearer',
       bearerFormat: 'JWT',
-    },
-    'jwt', 
-    )
+    }, 'jwt') // nome da estratégia
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document); 
+  SwaggerModule.setup('api', app, document); // disponível em http://localhost:3001/api
 
   await app.listen(3001);
-
-
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-
-  const config = new DocumentBuilder()
-    .setTitle('API - Farmácias Sociais Digitais')
-    .setDescription('Documentação da API para o sistema de Farmácias Gigitais Sociais')
-    .setVersion('1.0')
-    .addBearerAuth() 
-    .build();
-
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document); // acessa em http://localhost:3000/api
-
-  await app.listen(3000);
-
 }
+
 bootstrap();
-
-}
