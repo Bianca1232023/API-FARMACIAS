@@ -22,10 +22,9 @@ dotenv.config();
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true, // <-- torna o ConfigModule disponível globalmente
+      isGlobal: true, 
     }),
     SequelizeModule.forRoot({
-      // Configuração do Sequelize para conexão com o banco de dados
       dialect: 'postgres',
       host: process.env.DB_HOST_FARMACIAS,
       port: 5432,

@@ -23,7 +23,7 @@ describe('AppController', () => {
   });
 });
 
-@ApiTags('farmacias') // Categoria no Swagger
+@ApiTags('farmacias') 
 @Controller('farmacias')
 export class FarmaciaController {
   @Get()
