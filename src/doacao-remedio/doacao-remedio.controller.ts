@@ -6,13 +6,13 @@ import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiBearerAuth } 
 import { ExternalApiAuthGuard } from 'src/auth/external-api.guard';
 
 @ApiTags('Doações-Remédios') 
+@ApiBearerAuth()
+@UseGuards(ExternalApiAuthGuard)
 @Controller('doacoes-remedios')
 
 export class DoacaoRemedioController {
   constructor(private readonly service: DoacaoRemedioService) {}
 
-  @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth()
   @Post()
   @ApiOperation({ summary: 'Criar uma nova doação de remédio' })
   @ApiBody({ type: CreateDoacaoRemedioDto })
@@ -48,9 +48,6 @@ export class DoacaoRemedioController {
     return this.service.findByUsuarioId(+usuarioId);
   }
 
-
-  @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth()
   @Put(':id')
   @ApiOperation({ summary: 'Atualizar doação de remédio por ID' })
   @ApiParam({ name: 'id', type: Number })
@@ -61,8 +58,6 @@ export class DoacaoRemedioController {
     return this.service.update(+id, dto);
   }
 
-    @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth()
     @Patch(':id')
     @ApiOperation({ summary: 'Atualizar doação' })
     @ApiParam({ name: 'id', description: 'ID da doação' })
@@ -72,9 +67,6 @@ export class DoacaoRemedioController {
       return this.service.patch(+id, dto);
     }
   
-
-     @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth() 
   @Delete(':id')
   @ApiOperation({ summary: 'Remover doação por ID' })
   @ApiParam({ name: 'id', type: Number })
@@ -84,7 +76,7 @@ export class DoacaoRemedioController {
     return this.service.remove(+id);
   }
 }
-@ApiTags('farmacias') // Categoria no Swagger
+@ApiTags('farmacias') 
 @Controller('farmacias')
 export class FarmaciaController {
   @Get()

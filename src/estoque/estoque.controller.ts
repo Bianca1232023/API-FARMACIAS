@@ -6,8 +6,9 @@ import { Estoque } from './estoque.model';
 import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ExternalApiAuthGuard } from 'src/auth/external-api.guard';
 
-
 @ApiTags('estoque')
+@ApiBearerAuth()
+@UseGuards(ExternalApiAuthGuard)
 @Controller('estoque')
 
 export class EstoqueController {
@@ -22,8 +23,6 @@ export class EstoqueController {
     return this.service.findLowStock();
   }
 
-  @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth()
   @Post()
   @ApiOperation({ summary: 'Criar um novo item de estoque' })
   @ApiResponse({ status: 201, description: 'Estoque criado com sucesso.', type: Estoque })
@@ -50,8 +49,6 @@ export class EstoqueController {
     return this.service.findOne(+id);
   }
 
-  @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth()
 @Put(':id')
 @ApiOperation({ summary: 'Atualiza item de estoque por completo PUT' })
 @ApiResponse({ status: 200, description: 'Estoque atualizado com sucesso.', type: Estoque })
@@ -63,8 +60,6 @@ async update(@Param('id', ParseIntPipe) id: number, @Body() updateDto: UpdateEst
   return await this.service.update(id, updateDto);
 }
 
-  @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth()
 @Patch(':id')
 @ApiOperation({ summary: 'Atualiza parcialmente um estoque com patch' })
 @ApiResponse({ status: 200, description: 'Estoque atualizado parcialmente com sucesso.', type: Estoque })
@@ -76,8 +71,6 @@ async patch(@Param('id', ParseIntPipe) id: number, @Body() dto: Partial<UpdateEs
   return await this.service.patch(id, dto);
 }
    
-  @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth()
   @Delete(':id')
   @ApiOperation({ summary: 'Remove um estoque' })
   @ApiResponse({ status: 204, description: 'Estoque removido com sucesso.' })

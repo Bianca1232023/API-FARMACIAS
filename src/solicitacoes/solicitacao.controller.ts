@@ -24,6 +24,8 @@ import {
 import { ExternalApiAuthGuard } from 'src/auth/external-api.guard';
 
 @ApiTags('farmacias')
+@ApiBearerAuth()
+@UseGuards(ExternalApiAuthGuard)
 @Controller('farmacias')
 export class FarmaciaController {
   @Get()
@@ -52,8 +54,7 @@ export class SolicitacaoController {
 export class SolicitacoesController {
   constructor(private readonly service: SolicitacoesService) {}
 
-  @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth()
+
   @Post()
   @ApiOperation({ summary: 'Criar nova solicitação' })
   @ApiBody({ type: CreateSolicitacaoDto })
@@ -79,8 +80,6 @@ export class SolicitacoesController {
     return this.service.findById(id);
   }
 
-  @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth()
   @Put(':id')
   @ApiOperation({ summary: 'Atualizar solicitação por ID' })
   @ApiParam({ name: 'id', type: Number })
@@ -91,8 +90,6 @@ export class SolicitacoesController {
     return this.service.update(id, dto);
   }
 
-  @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth()
   @Delete(':id')
   @ApiOperation({ summary: 'Remover solicitação por ID' })
   @ApiParam({ name: 'id', type: Number })

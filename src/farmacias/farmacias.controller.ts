@@ -5,14 +5,14 @@ import { UpdateFarmaciaDto } from './dto/update-farmacia.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 import { ExternalApiAuthGuard } from 'src/auth/external-api.guard';
 
-@ApiTags('Farmácias') //nome do grupo no swagger
+@ApiTags('Farmácias') 
+@ApiBearerAuth()
+@UseGuards(ExternalApiAuthGuard)
 @Controller('farmacias')
 
 export class FarmaciasController {
   constructor(private readonly service: FarmaciasService) {}
 
-  @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth()
   @Post()
   @ApiOperation({ summary: 'Criar uma nova farmácia' })//resumo da operação
   @ApiResponse({ status: 201, description: 'Farmácia criada com sucesso.' })//possivel resposta http
@@ -56,8 +56,6 @@ export class FarmaciasController {
     return this.service.findByCidade(cidade);
   }
 
-  @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth()
   @Patch(':id')
   @ApiOperation({ summary: 'Atualizar farmácia' })
   @ApiParam({ name: 'id', description: 'ID da farmácia' })
@@ -67,8 +65,6 @@ export class FarmaciasController {
     return this.service.patch(+id, dto);
   }
 
-  @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth()
   @Put(':id')
   @ApiOperation({ summary: 'Atualiza farmácia por completo (PUT)' })
   @ApiResponse({ status: 200, description: 'Farmácia atualizada com sucesso.' })
@@ -80,8 +76,6 @@ export class FarmaciasController {
     return await this.service.update(id, updateDto);
   }
 
-  @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth()
   @Delete(':id')
   @ApiOperation({ summary: 'Remover farmácia' })
   @ApiParam({ name: 'id', description: 'ID da farmácia' })
@@ -101,7 +95,8 @@ export class FarmaciasController {
   }
 
 }
-@ApiTags('farmacias') // Categoria no Swagger
+
+@ApiTags('farmacias') 
 @Controller('farmacias')
 export class FarmaciaController {
   @Get()
