@@ -6,28 +6,27 @@ module.exports = {
       {
         farmaciaId: 1,
         remedioId: 1,
-        quantidade: 10,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        quantidade_disponivel: 50,
       },
       {
         farmaciaId: 1,
         remedioId: 2,
-        quantidade: 2,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        quantidade_disponivel: 30,
+      },
+      {
+        farmaciaId: 2,
+        remedioId: 1,
+        quantidade_disponivel: 40,
       },
       {
         farmaciaId: 2,
         remedioId: 3,
-        quantidade: 5,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        quantidade_disponivel: 10,
       },
-    ]);
+    ], {});
   },
 
   down: async (queryInterface, Sequelize) => {
     await queryInterface.bulkDelete('estoque', null, {});
-  },
+  }
 };
