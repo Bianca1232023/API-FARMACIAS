@@ -4,7 +4,7 @@ import { Farmacia } from './farmacias.model';
 import { CreateFarmaciaDto } from './dto/create-farmacia.dto';
 import { UpdateFarmaciaDto } from './dto/update-farmacia.dto';
 import { Op, fn, col, where } from 'sequelize';
-import { Estoque } from 'src/estoque/estoque.model';
+import { Estoque } from '../estoque/estoque.model';
 
 @Injectable()
 export class FarmaciasService {

@@ -1,7 +1,7 @@
 import { Table, Column, Model, DataType, ForeignKey, BelongsTo, PrimaryKey } from 'sequelize-typescript';
 import { Usuario } from '../usuarios/usuarios.model';
 import { Remedio } from '../remedios/remedios.model';
-import { Solicitacao } from 'src/solicitacoes/solicitacao.model';
+import { Solicitacao } from '../solicitacoes/solicitacao.model';
 
 @Table({ tableName: 'doacoes_remedios', timestamps: false })
 export class DoacaoRemedio extends Model {

@@ -14,7 +14,7 @@ module.exports = {
         allowNull: false,
       },
       solicitacaoId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER, 
         allowNull: false,
         references: {
           model: 'Solicitacoes',

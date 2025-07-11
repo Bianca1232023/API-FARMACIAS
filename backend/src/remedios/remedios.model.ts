@@ -1,5 +1,5 @@
 import { Table, Column, Model, DataType, PrimaryKey } from 'sequelize-typescript';
-import { Col } from 'sequelize/types/utils';
+//import { Col } from 'sequelize/types/utils';
 
 @Table({ tableName: 'remedios', timestamps: false })
 export class Remedio extends Model {

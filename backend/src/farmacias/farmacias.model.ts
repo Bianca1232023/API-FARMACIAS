@@ -1,5 +1,5 @@
 import { Table, Column, Model, DataType, PrimaryKey, HasMany } from 'sequelize-typescript';
-import { Estoque } from 'src/estoque/estoque.model';
+import { Estoque } from '../estoque/estoque.model';
 
 @Table({ tableName: 'farmacias', timestamps: false }) 
 export class Farmacia extends Model {//contempla regra de negocio: uma farmacia não pode ser cadastrada sem os dados completos de endereço
