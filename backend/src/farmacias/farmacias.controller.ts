@@ -3,7 +3,7 @@ import { FarmaciasService } from './farmacias.service';
 import { CreateFarmaciaDto } from './dto/create-farmacia.dto';
 import { UpdateFarmaciaDto } from './dto/update-farmacia.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
-import { ExternalApiAuthGuard } from 'src/auth/external-api.guard';
+import { ExternalApiAuthGuard } from 'backend/src/auth/external-api.guard';
 
 @ApiTags('Farmácias') //nome do grupo no swagger
 @Controller('farmacias')

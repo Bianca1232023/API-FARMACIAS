@@ -4,7 +4,7 @@ import { CreateReceitaDto } from './dto/create-receita.dto';
 import { UpdateReceitaDto } from './dto/update-receita.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { ParseIntPipe } from '@nestjs/common';
-import { ExternalApiAuthGuard } from 'src/auth/external-api.guard';
+import { ExternalApiAuthGuard } from 'backend/src/auth/external-api.guard';
 
 @ApiTags('receitas')
 @Controller('receitas')

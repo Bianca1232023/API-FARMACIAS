@@ -3,7 +3,7 @@ import { DoacaoRemedioService } from './doacao-remedio.service';
 import { CreateDoacaoRemedioDto } from './dto/create-doacao-remedio.dto';
 import { UpdateDoacaoRemedioDto } from './dto/update-doacao-remedio.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
-import { ExternalApiAuthGuard } from 'src/auth/external-api.guard';
+import { ExternalApiAuthGuard } from 'backend/src/auth/external-api.guard';
 
 @ApiTags('Doações-Remédios') 
 @Controller('doacoes-remedios')

@@ -21,7 +21,7 @@ import {
   ApiParam,
   ApiBody,
 } from '@nestjs/swagger';
-import { ExternalApiAuthGuard } from 'src/auth/external-api.guard';
+import { ExternalApiAuthGuard } from 'backend/src/auth/external-api.guard';
 
 @ApiTags('farmacias')
 @Controller('farmacias')

@@ -3,7 +3,7 @@ import { RemediosService } from './remedios.service';
 import { Remedio } from './remedios.model';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { RemediosController } from './remedios.controller';
-import { AuthModule } from 'src/auth/auth.module';
+import { AuthModule } from 'backend/src/auth/auth.module';
  
 @Module({
   imports: [

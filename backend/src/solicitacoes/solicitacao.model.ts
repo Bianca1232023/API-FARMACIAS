@@ -1,7 +1,7 @@
 import { Column, DataType, ForeignKey, Model, Table, HasOne, PrimaryKey } from 'sequelize-typescript';
 import { Receita } from '../receita/receita.model';
 import { Remedio } from '../remedios/remedios.model';
-import { Farmacia } from 'src/farmacias/farmacias.model';
+import { Farmacia } from 'backend/src/farmacias/farmacias.model';
 
 @Table({ tableName: 'solicitacoes', timestamps: false }) 
 export class Solicitacao extends Model<Solicitacao> {

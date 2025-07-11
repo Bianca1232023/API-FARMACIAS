@@ -3,7 +3,7 @@ import { RemediosService } from './remedios.service';
 import { CreateRemedioDto } from './dto/create-remedio.dto';
 import { UpdateRemedioDto } from './dto/update-remedio.dto';
 import { ApiTags, ApiOperation, ApiParam, ApiBody, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
-import { ExternalApiAuthGuard } from 'src/auth/external-api.guard';
+import { ExternalApiAuthGuard } from 'backend/src/auth/external-api.guard';
 @ApiTags('remedios')
 @Controller('remedios')
 //teste

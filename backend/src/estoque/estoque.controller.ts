@@ -4,7 +4,7 @@ import { CreateEstoqueDto } from './dto/create-estoque.dto';
 import { UpdateEstoqueDto } from './dto/update-estoque.dto';
 import { Estoque } from './estoque.model';
 import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ExternalApiAuthGuard } from 'src/auth/external-api.guard';
+import { ExternalApiAuthGuard } from 'backend/src/auth/external-api.guard';
 
 
 @ApiTags('estoque')
