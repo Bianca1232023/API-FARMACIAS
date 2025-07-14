@@ -7,13 +7,13 @@ import { ParseIntPipe } from '@nestjs/common';
 import { ExternalApiAuthGuard } from '../auth/external-api.guard';
 
 @ApiTags('receitas')
+@UseGuards(ExternalApiAuthGuard)
+@ApiBearerAuth()
 @Controller('receitas')
 
 export class ReceitaController {
   constructor(private readonly service: ReceitaService) {}
 
-  @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth()
   @Post()
   @ApiOperation({ summary: 'Cria uma nova receita' })
   @ApiResponse({ status: 201, description: 'Receita criada com sucesso.' })
@@ -36,8 +36,6 @@ export class ReceitaController {
     return this.service.findById(id);
   }
 
-    @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth()
   @Put(':id')
   @ApiOperation({ summary: 'Atualiza uma receita existente' })
   @ApiResponse({ status: 200, description: 'Receita atualizada com sucesso.' })
@@ -46,8 +44,6 @@ export class ReceitaController {
     return this.service.update(id, dto);
   }
 
-    @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth()
   @Delete(':id')
   @ApiOperation({ summary: 'Remove uma receita pelo ID' })
   @ApiResponse({ status: 200, description: 'Receita removida com sucesso.' })

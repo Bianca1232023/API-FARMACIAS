@@ -6,13 +6,12 @@ import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiBearerAuth } 
 import { ExternalApiAuthGuard } from '../auth/external-api.guard';
 
 @ApiTags('Doações-Remédios') 
+@UseGuards(ExternalApiAuthGuard)
+@ApiBearerAuth()
 @Controller('doacoes-remedios')
 
 export class DoacaoRemedioController {
   constructor(private readonly service: DoacaoRemedioService) {}
-
-  @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth()
   @Post()
   @ApiOperation({ summary: 'Criar uma nova doação de remédio' })
   @ApiBody({ type: CreateDoacaoRemedioDto })
@@ -48,9 +47,6 @@ export class DoacaoRemedioController {
     return this.service.findByUsuarioId(+usuarioId);
   }
 
-
-  @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth()
   @Put(':id')
   @ApiOperation({ summary: 'Atualizar doação de remédio por ID' })
   @ApiParam({ name: 'id', type: Number })
@@ -60,9 +56,6 @@ export class DoacaoRemedioController {
   update(@Param('id') id: string, @Body() dto: UpdateDoacaoRemedioDto) {
     return this.service.update(+id, dto);
   }
-
-    @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth()
     @Patch(':id')
     @ApiOperation({ summary: 'Atualizar doação' })
     @ApiParam({ name: 'id', description: 'ID da doação' })
@@ -71,10 +64,7 @@ export class DoacaoRemedioController {
     patch(@Param('id') id: string, @Body() dto: UpdateDoacaoRemedioDto) {
       return this.service.patch(+id, dto);
     }
-  
-
-     @UseGuards(ExternalApiAuthGuard)
-  @ApiBearerAuth() 
+    
   @Delete(':id')
   @ApiOperation({ summary: 'Remover doação por ID' })
   @ApiParam({ name: 'id', type: Number })
